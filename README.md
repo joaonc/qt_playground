@@ -1,2 +1,3 @@
-# qt_playground
-Playing around with QT for learning purposes
+# QT Playground
+Playing around with QT for learning purposes.
+
