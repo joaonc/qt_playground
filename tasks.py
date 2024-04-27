@@ -8,7 +8,6 @@ os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
 
 PROJECT_ROOT = Path(__file__).parent
 ASSETS_DIR = PROJECT_ROOT / 'assets'
-BIN_DIR = ASSETS_DIR / 'bin'
 
 # Requirements files
 REQUIREMENTS_MAIN = 'main'
@@ -25,16 +24,21 @@ Add new requirements files here.
 
 REQUIREMENTS_TASK_HELP = {
     'requirements': '`.in` file. Full name not required, just the initial name after the dash '
-    f"(ex. 'dev'). For main file use '{REQUIREMENTS_MAIN}'. Available requirements: "
+    f'(ex. "dev"). For main file use "{REQUIREMENTS_MAIN}". Available requirements: '
     f'{", ".join(REQUIREMENTS_FILES)}.'
 }
+
+UI_FILES = tuple((ASSETS_DIR / 'ui').glob("**/*.ui"))
+"""
+QT ``.ui`` files.
+"""
 
 
 def _csstr_to_list(csstr: str) -> list[str]:
     """
     Convert a comma-separated string to list.
     """
-    return [s.strip() for s in csstr.split(",")]
+    return [s.strip() for s in csstr.split(',')]
 
 
 def _get_requirements_file(requirements: str, extension: str) -> str:
@@ -66,6 +70,53 @@ def _get_requirements_files(requirements: str | None, extension: str) -> list[st
     ]
 
     return filenames
+
+
+@task(
+    help={
+        'file': '`.ui` file to be converted to `.py`. `.ui` extension not required. Can be a comma '
+        'separated. If not supplied, all files will be converted. Available files: '
+        f'{", ".join(p.stem for p in UI_FILES)}.'
+    }
+)
+def ui_py(c, file=None):
+    """
+    Convert QT `.ui` files into `.py`.
+    """
+    if file:
+        file_stems = [file[:-3] if file.lower().endswith('.ui') else file]
+    else:
+        file_stems = [p.stem for p in UI_FILES]
+
+    for file_stem in file_stems:
+        ui_file_path = next((p for p in UI_FILES if p.stem == file_stem), None)
+        if not ui_file_path:
+            raise Exit(
+                f'File "{file}" not found. Available files: ", ".join(p.stem for p in UI_FILES)'
+            )
+
+        py_file_path = PROJECT_ROOT / 'src/ui/forms' / f'{file_stem}_ui.py'
+
+        c.run(f'pyside6-uic {ui_file_path} -o {py_file_path}')
+
+
+@task(
+    help={
+        'file': f'`.ui` file to be edited. Available files: {", ".join(p.stem for p in UI_FILES)}.'
+    }
+)
+def ui_edit(c, file):
+    """
+    Edit a file in QT Designer.
+    """
+    file_stem = file[:-3] if file.lower().endswith('.ui') else file
+    ui_file_path = next((p for p in UI_FILES if p.stem == file_stem), None)
+    if not ui_file_path:
+        raise Exit(
+            f'File "{file}" not found. Available files: {", ".join(p.stem for p in UI_FILES)}'
+        )
+
+    c.run(f'pyside6-designer {ui_file_path}', asynchronous=True)
 
 
 @task
@@ -193,7 +244,12 @@ precommit_collection.add_task(precommit_run, 'run')
 precommit_collection.add_task(precommit_install, 'install')
 precommit_collection.add_task(precommit_upgrade, 'upgrade')
 
+ui_collection = Collection('ui')
+ui_collection.add_task(ui_py, 'py')
+ui_collection.add_task(ui_edit, 'edit')
+
 ns.add_collection(lint_collection)
 ns.add_collection(pip_collection)
 ns.add_collection(precommit_collection)
 ns.add_collection(test_collection)
+ns.add_collection(ui_collection)
