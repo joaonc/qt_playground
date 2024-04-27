@@ -3,18 +3,18 @@ from pathlib import Path
 
 from invoke import Collection, Exit, task
 
-os.environ.setdefault("INVOKE_RUN_ECHO", "1")  # Show commands by default
+os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
 
 
 PROJECT_ROOT = Path(__file__).parent
-ASSETS_DIR = PROJECT_ROOT / "assets"
-BIN_DIR = ASSETS_DIR / "bin"
+ASSETS_DIR = PROJECT_ROOT / 'assets'
+BIN_DIR = ASSETS_DIR / 'bin'
 
 # Requirements files
-REQUIREMENTS_MAIN = "main"
+REQUIREMENTS_MAIN = 'main'
 REQUIREMENTS_FILES = {
-    REQUIREMENTS_MAIN: "requirements",
-    "dev": "requirements-dev",
+    REQUIREMENTS_MAIN: 'requirements',
+    'dev': 'requirements-dev',
 }
 """
 Requirements files.
@@ -24,7 +24,7 @@ Add new requirements files here.
 """
 
 REQUIREMENTS_TASK_HELP = {
-    "requirements": "`.in` file. Full name not required, just the initial name after the dash "
+    'requirements': '`.in` file. Full name not required, just the initial name after the dash '
     f"(ex. 'dev'). For main file use '{REQUIREMENTS_MAIN}'. Available requirements: "
     f'{", ".join(REQUIREMENTS_FILES)}.'
 }
@@ -48,13 +48,13 @@ def _get_requirements_file(requirements: str, extension: str) -> str:
     """
     filename = REQUIREMENTS_FILES.get(requirements, requirements)
     if filename not in REQUIREMENTS_FILES.values():
-        raise Exit(f"`{requirements}` is an unknown requirements file.")
+        raise Exit(f'`{requirements}` is an unknown requirements file.')
 
     return f'{filename}.{extension.lstrip(".")}'
 
 
 def _get_requirements_files(requirements: str | None, extension: str) -> list[str]:
-    extension = extension.lstrip(".")
+    extension = extension.lstrip('.')
     if requirements is None:
         requirements_files = list(REQUIREMENTS_FILES)
     else:
@@ -75,17 +75,17 @@ def lint_black(c, path='.'):
 
 @task
 def lint_flake8(c, path='.'):
-    c.run(f"flake8 {path}")
+    c.run(f'flake8 {path}')
 
 
 @task
 def lint_isort(c, path='.'):
-    c.run(f"isort {path}")
+    c.run(f'isort {path}')
 
 
 @task
 def lint_mypy(c, path='.'):
-    c.run(f"mypy {path}")
+    c.run(f'mypy {path}')
 
 
 @task(lint_isort, lint_black, lint_flake8, lint_mypy)
@@ -110,8 +110,8 @@ def pip_compile(c, requirements=None):
     """
     Compile requirements file.
     """
-    for filename in _get_requirements_files(requirements, "in"):
-        c.run(f"pip-compile {filename}")
+    for filename in _get_requirements_files(requirements, 'in'):
+        c.run(f'pip-compile {filename}')
 
 
 @task(help=REQUIREMENTS_TASK_HELP)
@@ -123,7 +123,7 @@ def pip_sync(c, requirements=None):
 
 
 @task(
-    help=REQUIREMENTS_TASK_HELP | {"package": "Package to upgrade. Can be a comma separated list."}
+    help=REQUIREMENTS_TASK_HELP | {'package': 'Package to upgrade. Can be a comma separated list.'}
 )
 def pip_package(c, requirements, package):
     """
@@ -161,7 +161,7 @@ def precommit_upgrade(c):
     c.run('pre-commit autoupdate')
 
 
-@task(help={"hook": "Name of hook to run. Default is to run all."})
+@task(help={'hook': 'Name of hook to run. Default is to run all.'})
 def precommit_run(c, hook=None):
     """
     Manually run pre-commit hooks.
@@ -172,26 +172,26 @@ def precommit_run(c, hook=None):
 
 ns = Collection()  # Main namespace
 
-test_collection = Collection("test")
-test_collection.add_task(test_unit, "unit")
+test_collection = Collection('test')
+test_collection.add_task(test_unit, 'unit')
 
-lint_collection = Collection("lint")
-lint_collection.add_task(lint_all, "all")
-lint_collection.add_task(lint_black, "black")
-lint_collection.add_task(lint_flake8, "flake8")
-lint_collection.add_task(lint_isort, "isort")
-lint_collection.add_task(lint_mypy, "mypy")
+lint_collection = Collection('lint')
+lint_collection.add_task(lint_all, 'all')
+lint_collection.add_task(lint_black, 'black')
+lint_collection.add_task(lint_flake8, 'flake8')
+lint_collection.add_task(lint_isort, 'isort')
+lint_collection.add_task(lint_mypy, 'mypy')
 
-pip_collection = Collection("pip")
-pip_collection.add_task(pip_compile, "compile")
-pip_collection.add_task(pip_package, "package")
-pip_collection.add_task(pip_sync, "sync")
-pip_collection.add_task(pip_upgrade, "upgrade")
+pip_collection = Collection('pip')
+pip_collection.add_task(pip_compile, 'compile')
+pip_collection.add_task(pip_package, 'package')
+pip_collection.add_task(pip_sync, 'sync')
+pip_collection.add_task(pip_upgrade, 'upgrade')
 
-precommit_collection = Collection("precommit")
-precommit_collection.add_task(precommit_run, "run")
-precommit_collection.add_task(precommit_install, "install")
-precommit_collection.add_task(precommit_upgrade, "upgrade")
+precommit_collection = Collection('precommit')
+precommit_collection.add_task(precommit_run, 'run')
+precommit_collection.add_task(precommit_install, 'install')
+precommit_collection.add_task(precommit_upgrade, 'upgrade')
 
 ns.add_collection(lint_collection)
 ns.add_collection(pip_collection)
