@@ -8,7 +8,6 @@ os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
 
 PROJECT_ROOT = Path(__file__).parent
 ASSETS_DIR = PROJECT_ROOT / 'assets'
-BIN_DIR = ASSETS_DIR / 'bin'
 
 # Requirements files
 REQUIREMENTS_MAIN = 'main'
@@ -25,11 +24,11 @@ Add new requirements files here.
 
 REQUIREMENTS_TASK_HELP = {
     'requirements': '`.in` file. Full name not required, just the initial name after the dash '
-    f"(ex. 'dev'). For main file use '{REQUIREMENTS_MAIN}'. Available requirements: "
+    f'(ex. "dev"). For main file use "{REQUIREMENTS_MAIN}". Available requirements: '
     f'{", ".join(REQUIREMENTS_FILES)}.'
 }
 
-UI_FILES = tuple(get_asset('ui').glob("**/*.ui"))
+UI_FILES = tuple((ASSETS_DIR / 'ui').glob("**/*.ui"))
 """
 QT ``.ui`` files.
 """
@@ -39,7 +38,7 @@ def _csstr_to_list(csstr: str) -> list[str]:
     """
     Convert a comma-separated string to list.
     """
-    return [s.strip() for s in csstr.split(",")]
+    return [s.strip() for s in csstr.split(',')]
 
 
 def _get_requirements_file(requirements: str, extension: str) -> str:
