@@ -1,0 +1,16 @@
+-r requirements.txt
+
+# Tools
+invoke              # Tasks
+pip-tools           # Package management
+pre-commit          # Pre-commit hooks
+
+# Linting
+bandit              # Linter
+black               # Linter
+flake8              # Linter
+isort               # Linter
+mypy                # Code inspector
+
+# Test
+pytest              # Test framework
