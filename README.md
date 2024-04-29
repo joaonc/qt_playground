@@ -1,5 +1,5 @@
-# QT Playground
-Playing around with QT for learning purposes.
+# Qt Playground
+Playing around with **Qt** for learning purposes.
 
 Uses [Qt 6](https://www.qt.io) and [Qt for Python](https://wiki.qt.io/Qt_for_Python), aka _PySide_,
 which includes _Qt Designer_, a WYSIWYG UI editor.
@@ -23,3 +23,20 @@ All the required tools are available by installing `pyside6`:
   ```
   pyside6-uic assets/ui/settings.ui -o hd_active/ui/forms/settings_ui.py
   ```
+
+#### Edit UI file
+```
+inv ui.edit <file>
+
+ex:
+  * inv ui.edit app.ui
+  * inv ui.edit app  # extension not required
+```
+
+#### Convert `.ui` to `.py`
+```
+inv ui.py <file>  # `.ui` extension not required
+
+# Can be multiple files, comma separated
+inv ui.py <file1>,<file2>
+```
