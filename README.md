@@ -40,3 +40,7 @@ inv ui.py <file>  # `.ui` extension not required
 # Can be multiple files, comma separated
 inv ui.py <file1>,<file2>
 ```
+
+## Resources
+* [PySide6 tutorial](https://www.pythonguis.com/pyside6-tutorial/#pyside6-getting-started)
+* [First steps with Qt Designer](https://www.pythonguis.com/tutorials/pyside6-first-steps-qt-designer/)
