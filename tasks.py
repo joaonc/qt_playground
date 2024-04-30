@@ -84,7 +84,10 @@ def ui_py(c, file=None):
     Convert QT `.ui` files into `.py`.
     """
     if file:
-        file_stems = [file[:-3] if file.lower().endswith('.ui') else file]
+        file_stems = [
+            (_f2[:-3] if _f2.lower().endswith('.ui') else _f2)
+            for _f2 in [_f1.strip() for _f1 in file.split(',')]
+        ]
     else:
         file_stems = [p.stem for p in UI_FILES]
 
@@ -92,7 +95,7 @@ def ui_py(c, file=None):
         ui_file_path = next((p for p in UI_FILES if p.stem == file_stem), None)
         if not ui_file_path:
             raise Exit(
-                f'File "{file}" not found. Available files: ", ".join(p.stem for p in UI_FILES)'
+                f'File "{file}" not found. Available files: {", ".join(p.stem for p in UI_FILES)}'
             )
 
         py_file_path = PROJECT_ROOT / 'src/ui/forms' / f'{file_stem}_ui.py'
