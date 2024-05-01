@@ -2,7 +2,7 @@ import sys
 
 from PySide6.QtWidgets import QApplication, QMainWindow
 
-from src.ui.forms.main_window_ui import Ui_MainWindow
+from src.ui.forms.main_window_ui import Ui_mainMainWindow
 
 
 def main():
@@ -11,7 +11,7 @@ def main():
     # If command line arguments re not used, `QApplication([])` works too.
     app = QApplication(sys.argv)
     window = QMainWindow()
-    ui = Ui_MainWindow()
+    ui = Ui_mainMainWindow()
     ui.setupUi(window)
     window.show()
 
