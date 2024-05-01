@@ -16,13 +16,14 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractButton, QApplication, QDialog, QDialogButtonBox,
-    QGridLayout, QSizePolicy, QSpacerItem, QWidget)
+    QGridLayout, QLineEdit, QPushButton, QSizePolicy,
+    QSpacerItem, QWidget)
 
 class Ui_Main(object):
     def setupUi(self, Main):
         if not Main.objectName():
             Main.setObjectName(u"Main")
-        Main.resize(371, 368)
+        Main.resize(453, 397)
         self.gridLayout = QGridLayout(Main)
         self.gridLayout.setObjectName(u"gridLayout")
         self.buttonBox = QDialogButtonBox(Main)
@@ -30,11 +31,26 @@ class Ui_Main(object):
         self.buttonBox.setOrientation(Qt.Orientation.Horizontal)
         self.buttonBox.setStandardButtons(QDialogButtonBox.StandardButton.Cancel|QDialogButtonBox.StandardButton.Ok)
 
-        self.gridLayout.addWidget(self.buttonBox, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.buttonBox, 2, 2, 1, 1)
+
+        self.textLineEdit = QLineEdit(Main)
+        self.textLineEdit.setObjectName(u"textLineEdit")
+
+        self.gridLayout.addWidget(self.textLineEdit, 0, 0, 1, 1)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.gridLayout.addItem(self.verticalSpacer, 1, 0, 1, 1)
+        self.gridLayout.addItem(self.verticalSpacer, 1, 2, 1, 1)
+
+        self.showTextPushButton = QPushButton(Main)
+        self.showTextPushButton.setObjectName(u"showTextPushButton")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.showTextPushButton.sizePolicy().hasHeightForWidth())
+        self.showTextPushButton.setSizePolicy(sizePolicy)
+
+        self.gridLayout.addWidget(self.showTextPushButton, 0, 2, 1, 1)
 
 
         self.retranslateUi(Main)
@@ -46,5 +62,6 @@ class Ui_Main(object):
 
     def retranslateUi(self, Main):
         Main.setWindowTitle(QCoreApplication.translate("Main", u"Dialog", None))
+        self.showTextPushButton.setText(QCoreApplication.translate("Main", u"Show Text", None))
     # retranslateUi
 

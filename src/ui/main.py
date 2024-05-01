@@ -1,10 +1,8 @@
 import sys
 
-from PySide6.QtCore import QFile
-from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QMainWindow
 
-from src import ASSETS_DIR
+from src.ui.forms.main_window_ui import Ui_MainWindow
 
 
 def main():
@@ -12,11 +10,10 @@ def main():
     # `sys.argv` to allow command line arguments for the app.
     # If command line arguments re not used, `QApplication([])` works too.
     app = QApplication(sys.argv)
-    file = QFile(ASSETS_DIR / 'ui/main.ui')
-    file.open(QFile.OpenModeFlag.ReadOnly)
-    loader = QUiLoader()
-    dialog = loader.load(file)
-    dialog.show()
+    window = QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(window)
+    window.show()
 
     # Start the event loop.
     sys.exit(app.exec())

@@ -25,7 +25,7 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QLineEdit" name="lineEdit"/>
+    <widget class="QLineEdit" name="textLineEdit"/>
    </item>
    <item row="1" column="2">
     <spacer name="verticalSpacer">
@@ -41,7 +41,7 @@
     </spacer>
    </item>
    <item row="0" column="2">
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="showTextPushButton">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -64,8 +64,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>440</x>
+     <y>392</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -80,12 +80,28 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>440</x>
+     <y>392</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>showTextPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Main</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>282</x>
+     <y>23</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>226</x>
+     <y>198</y>
     </hint>
    </hints>
   </connection>
