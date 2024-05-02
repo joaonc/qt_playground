@@ -1,26 +1,23 @@
 import sys
 
-from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtWidgets import QApplication, QWidget
 
-from src.ui.forms.main_window_ui import Ui_mainMainWindow
+from src.ui.forms.main_ui import Ui_mainForm
 
 
-def main():
-    # Need one (and only one) `QApplication` instance per application.
-    # `sys.argv` to allow command line arguments for the app.
-    # If command line arguments re not used, `QApplication([])` works too.
-    app = QApplication(sys.argv)
-    window = QMainWindow()
-    ui = Ui_mainMainWindow()
-    ui.setupUi(window)
+class MyApp(QWidget):
+    def __init__(self):
+        super().__init__()
+        ui = Ui_mainForm()
+        ui.setupUi(self)
 
-    # Access window elements
-    print(ui.viewTextPushButton.text())
 
-    window.show()
-    # Start the event loop.
+def main(argv):
+    app = QApplication(argv)
+    my_app = MyApp()
+    my_app.show()
     sys.exit(app.exec())
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
