@@ -11,19 +11,24 @@
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+    QCursor, QFont, QFontDatabase, QGradient,
+    QIcon, QImage, QKeySequence, QLinearGradient,
+    QPainter, QPalette, QPixmap, QRadialGradient,
+    QTransform)
 from PySide6.QtWidgets import (QApplication, QGridLayout, QLineEdit, QMainWindow,
-    QMenuBar, QPushButton, QSizePolicy, QSpacerItem,
-    QStatusBar, QWidget)
+    QMenu, QMenuBar, QPushButton, QSizePolicy,
+    QSpacerItem, QStatusBar, QWidget)
 
 class Ui_mainMainWindow(object):
     def setupUi(self, mainMainWindow):
         if not mainMainWindow.objectName():
             mainMainWindow.setObjectName(u"mainMainWindow")
         mainMainWindow.resize(528, 474)
+        self.actionOpen = QAction(mainMainWindow)
+        self.actionOpen.setObjectName(u"actionOpen")
+        self.actionClose = QAction(mainMainWindow)
+        self.actionClose.setObjectName(u"actionClose")
         self.centralwidget = QWidget(mainMainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout = QGridLayout(self.centralwidget)
@@ -69,10 +74,16 @@ class Ui_mainMainWindow(object):
         self.menubar = QMenuBar(mainMainWindow)
         self.menubar.setObjectName(u"menubar")
         self.menubar.setGeometry(QRect(0, 0, 528, 37))
+        self.menuFile = QMenu(self.menubar)
+        self.menuFile.setObjectName(u"menuFile")
         mainMainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(mainMainWindow)
         self.statusbar.setObjectName(u"statusbar")
         mainMainWindow.setStatusBar(self.statusbar)
+
+        self.menubar.addAction(self.menuFile.menuAction())
+        self.menuFile.addAction(self.actionOpen)
+        self.menuFile.addAction(self.actionClose)
 
         self.retranslateUi(mainMainWindow)
         self.okPushButton.clicked.connect(mainMainWindow.close)
@@ -82,7 +93,10 @@ class Ui_mainMainWindow(object):
 
     def retranslateUi(self, mainMainWindow):
         mainMainWindow.setWindowTitle(QCoreApplication.translate("mainMainWindow", u"MainWindow", None))
+        self.actionOpen.setText(QCoreApplication.translate("mainMainWindow", u"Open", None))
+        self.actionClose.setText(QCoreApplication.translate("mainMainWindow", u"Close", None))
         self.okPushButton.setText(QCoreApplication.translate("mainMainWindow", u"Ok", None))
         self.viewTextPushButton.setText(QCoreApplication.translate("mainMainWindow", u"View Text", None))
+        self.menuFile.setTitle(QCoreApplication.translate("mainMainWindow", u"File", None))
     # retranslateUi
 

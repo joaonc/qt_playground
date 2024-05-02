@@ -13,8 +13,11 @@ def main():
     window = QMainWindow()
     ui = Ui_mainMainWindow()
     ui.setupUi(window)
-    window.show()
 
+    # Access window elements
+    print(ui.viewTextPushButton.text())
+
+    window.show()
     # Start the event loop.
     sys.exit(app.exec())
 
