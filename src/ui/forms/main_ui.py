@@ -15,36 +15,36 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractButton, QApplication, QDialog, QDialogButtonBox,
-    QGridLayout, QSizePolicy, QSpacerItem, QWidget)
+from PySide6.QtWidgets import (QApplication, QLineEdit, QPlainTextEdit, QPushButton,
+    QSizePolicy, QWidget)
 
-class Ui_Main(object):
-    def setupUi(self, Main):
-        if not Main.objectName():
-            Main.setObjectName(u"Main")
-        Main.resize(371, 368)
-        self.gridLayout = QGridLayout(Main)
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.buttonBox = QDialogButtonBox(Main)
-        self.buttonBox.setObjectName(u"buttonBox")
-        self.buttonBox.setOrientation(Qt.Orientation.Horizontal)
-        self.buttonBox.setStandardButtons(QDialogButtonBox.StandardButton.Cancel|QDialogButtonBox.StandardButton.Ok)
+class Ui_mainForm(object):
+    def setupUi(self, mainForm):
+        if not mainForm.objectName():
+            mainForm.setObjectName(u"mainForm")
+        mainForm.resize(400, 300)
+        self.inputLineEdit = QLineEdit(mainForm)
+        self.inputLineEdit.setObjectName(u"inputLineEdit")
+        self.inputLineEdit.setGeometry(QRect(40, 30, 113, 21))
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.inputLineEdit.sizePolicy().hasHeightForWidth())
+        self.inputLineEdit.setSizePolicy(sizePolicy)
+        self.messagePushButton = QPushButton(mainForm)
+        self.messagePushButton.setObjectName(u"messagePushButton")
+        self.messagePushButton.setGeometry(QRect(190, 30, 100, 32))
+        self.outputPlainTextEdit = QPlainTextEdit(mainForm)
+        self.outputPlainTextEdit.setObjectName(u"outputPlainTextEdit")
+        self.outputPlainTextEdit.setGeometry(QRect(40, 70, 251, 181))
 
-        self.gridLayout.addWidget(self.buttonBox, 2, 0, 1, 1)
+        self.retranslateUi(mainForm)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.gridLayout.addItem(self.verticalSpacer, 1, 0, 1, 1)
-
-
-        self.retranslateUi(Main)
-        self.buttonBox.accepted.connect(Main.accept)
-        self.buttonBox.rejected.connect(Main.reject)
-
-        QMetaObject.connectSlotsByName(Main)
+        QMetaObject.connectSlotsByName(mainForm)
     # setupUi
 
-    def retranslateUi(self, Main):
-        Main.setWindowTitle(QCoreApplication.translate("Main", u"Dialog", None))
+    def retranslateUi(self, mainForm):
+        mainForm.setWindowTitle(QCoreApplication.translate("mainForm", u"Qt Playground", None))
+        self.messagePushButton.setText(QCoreApplication.translate("mainForm", u"Message", None))
     # retranslateUi
 
