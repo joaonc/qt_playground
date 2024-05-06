@@ -2,7 +2,7 @@ import sys
 
 from PySide6.QtWidgets import QApplication
 
-from ui.main_form import MainForm
+from src.ui.main_form import MainForm
 
 
 def main(argv: list | None = None):
