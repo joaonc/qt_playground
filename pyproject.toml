@@ -13,7 +13,7 @@ sections = 'FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'
 [tool.mypy]
 exclude = [
     'venv', '.venv', 'docusaurus', '.git', '.eggs', 'build', 'dist', '.cache', '.pytest_cache',
-    '.mypy_cache', '.vscode', '.idea', 'tasks.py'
+    '.mypy_cache', '.vscode', '.idea', 'tasks.py', 'src/ui'
 ]
 python_version = '3.10'
 warn_return_any = true
@@ -25,7 +25,7 @@ disable_error_code = 'annotation-unchecked'
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
 module = [
-    'invoke', 'pytest_check', 'factory'
+    'invoke', 'pytest_check', 'factory', 'PySide6'
 ]
 
 [tool.pytest.ini_options]

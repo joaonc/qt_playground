@@ -22,7 +22,7 @@ class Ui_mainForm(object):
     def setupUi(self, mainForm):
         if not mainForm.objectName():
             mainForm.setObjectName(u"mainForm")
-        mainForm.resize(400, 300)
+        mainForm.resize(328, 299)
         self.inputLineEdit = QLineEdit(mainForm)
         self.inputLineEdit.setObjectName(u"inputLineEdit")
         self.inputLineEdit.setGeometry(QRect(40, 30, 113, 21))
@@ -37,6 +37,11 @@ class Ui_mainForm(object):
         self.outputPlainTextEdit = QPlainTextEdit(mainForm)
         self.outputPlainTextEdit.setObjectName(u"outputPlainTextEdit")
         self.outputPlainTextEdit.setGeometry(QRect(40, 70, 251, 181))
+        self.showMessagesPushButton = QPushButton(mainForm)
+        self.showMessagesPushButton.setObjectName(u"showMessagesPushButton")
+        self.showMessagesPushButton.setGeometry(QRect(169, 260, 121, 32))
+        sizePolicy.setHeightForWidth(self.showMessagesPushButton.sizePolicy().hasHeightForWidth())
+        self.showMessagesPushButton.setSizePolicy(sizePolicy)
 
         self.retranslateUi(mainForm)
 
@@ -46,5 +51,6 @@ class Ui_mainForm(object):
     def retranslateUi(self, mainForm):
         mainForm.setWindowTitle(QCoreApplication.translate("mainForm", u"Qt Playground", None))
         self.messagePushButton.setText(QCoreApplication.translate("mainForm", u"Message", None))
+        self.showMessagesPushButton.setText(QCoreApplication.translate("mainForm", u"Show Messages", None))
     # retranslateUi
 
