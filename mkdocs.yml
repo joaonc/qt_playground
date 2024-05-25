@@ -1,4 +1,4 @@
-site_name: NIFT QA
+site_name: Qt Playground
 
 nav:
   - Home:
@@ -9,7 +9,7 @@ theme:
   logo: _assets/images/logo.svg
   favicon: _assets/images/favicon.ico
   font:
-    text: Arimo                 # Google font. Replaces the default Arial
+    text: Arimo                 # Google font, replaces the default Arial
   features:
     - content.code.annotate
     - content.code.copy         # Copy button on top right of code blocks
