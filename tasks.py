@@ -14,6 +14,7 @@ REQUIREMENTS_MAIN = 'main'
 REQUIREMENTS_FILES = {
     REQUIREMENTS_MAIN: 'requirements',
     'dev': 'requirements-dev',
+    'docs': 'requirements-docs',
 }
 """
 Requirements files.
@@ -162,7 +163,7 @@ def test_unit(c):
 @task(help=REQUIREMENTS_TASK_HELP)
 def pip_compile(c, requirements=None):
     """
-    Compile requirements file.
+    Compile requirements file(s).
     """
     for filename in _get_requirements_files(requirements, 'in'):
         c.run(f'pip-compile {filename}')
@@ -223,6 +224,20 @@ def precommit_run(c, hook=None):
     hook = hook or '--all-files'
     c.run(f'pre-commit run {hook}')
 
+@task
+def docs_serve(c):
+    """
+    Start documentation local server.
+    """
+    c.run('mkdocs serve')
+
+
+@task
+def docs_deploy(c):
+    """
+    Publish documentation to GitHub Pages at https://xealenergy.github.io/xeal-nift-qa
+    """
+    c.run('mkdocs gh-deploy')
 
 ns = Collection()  # Main namespace
 
@@ -247,6 +262,10 @@ precommit_collection.add_task(precommit_run, 'run')
 precommit_collection.add_task(precommit_install, 'install')
 precommit_collection.add_task(precommit_upgrade, 'upgrade')
 
+docs_collection = Collection('docs')
+docs_collection.add_task(docs_serve, 'serve')
+docs_collection.add_task(docs_deploy, 'deploy')
+
 ui_collection = Collection('ui')
 ui_collection.add_task(ui_py, 'py')
 ui_collection.add_task(ui_edit, 'edit')
@@ -255,4 +274,5 @@ ns.add_collection(lint_collection)
 ns.add_collection(pip_collection)
 ns.add_collection(precommit_collection)
 ns.add_collection(test_collection)
+ns.add_collection(docs_collection)
 ns.add_collection(ui_collection)
