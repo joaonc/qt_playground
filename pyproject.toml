@@ -2,38 +2,33 @@
 
 [tool.black]
 line-length = 100
-target-version = ['py310']
+target-version = ['py311']
 skip-string-normalization = true
 
 [tool.isort]
 line_length = 100
 profile = 'black'
 sections = 'FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'
+skip = ['src/ui',  '.venv*',  'venv*']
 
 [tool.mypy]
 exclude = [
-    'venv', '.venv', 'docusaurus', '.git', '.eggs', 'build', 'dist', '.cache', '.pytest_cache',
+    'venv*', '.venv*', '.git', '.eggs', 'build', 'dist', '.cache', '.pytest_cache',
     '.mypy_cache', '.vscode', '.idea', 'tasks.py', 'src/ui'
 ]
-python_version = '3.10'
+python_version = '3.11'
 warn_return_any = true
 warn_unused_configs = true
 # Disable the warning below, from type hinting variables in a function.
-# By default the bodies of untyped functions are not checked, consider using --check-untyped-defs
+# By default, the bodies of untyped functions are not checked, consider using --check-untyped-defs
 disable_error_code = 'annotation-unchecked'
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
 module = [
-    'invoke', 'pytest_check', 'factory', 'PySide6'
+    'invoke', 'factory', 'PySide6'
 ]
 
 [tool.pytest.ini_options]
-# nift_board: Requires a NIFT board to be connected via USB.
-markers = ['pri_1', 'flaky', 'nightly', 'performance', 'manual', 'nift_board']
+markers = ['pri_1', 'flaky', 'nightly', 'performance', 'manual']
 testpaths = ['tests']
-# Disable stdio capture, required when using `ManualNfcClient`, `MobileClient`, or any form of
-# manual interaction.
-addopts = ['-s']
-# `xfail` tests that pass will fail.
-xfail_strict = true

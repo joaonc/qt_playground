@@ -224,6 +224,7 @@ def precommit_run(c, hook=None):
     hook = hook or '--all-files'
     c.run(f'pre-commit run {hook}')
 
+
 @task
 def docs_serve(c):
     """
@@ -238,6 +239,7 @@ def docs_deploy(c):
     Publish documentation to GitHub Pages at https://xealenergy.github.io/xeal-nift-qa
     """
     c.run('mkdocs gh-deploy')
+
 
 ns = Collection()  # Main namespace
 
