@@ -9,7 +9,8 @@ skip-string-normalization = true
 line_length = 100
 profile = 'black'
 sections = 'FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'
-skip = ['src/ui',  '.venv*',  'venv*']
+skip = ['src/ui/forms']
+skip_glob = ['**/.venv*', '**/venv*']
 
 [tool.mypy]
 exclude = [
