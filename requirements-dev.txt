@@ -79,13 +79,13 @@ pyproject-hooks==1.1.0
     # via
     #   build
     #   pip-tools
-pyside6==6.7.0
+pyside6==6.7.1
     # via -r requirements.txt
-pyside6-addons==6.7.0
+pyside6-addons==6.7.1
     # via
     #   -r requirements.txt
     #   pyside6
-pyside6-essentials==6.7.0
+pyside6-essentials==6.7.1
     # via
     #   -r requirements.txt
     #   pyside6
@@ -98,7 +98,7 @@ pyyaml==6.0.1
     #   pre-commit
 rich==13.7.1
     # via bandit
-shiboken6==6.7.0
+shiboken6==6.7.1
     # via
     #   -r requirements.txt
     #   pyside6
@@ -108,7 +108,7 @@ stevedore==5.2.0
     # via bandit
 typing-extensions==4.11.0
     # via mypy
-virtualenv==20.26.1
+virtualenv==20.26.2
     # via pre-commit
 wheel==0.43.0
     # via pip-tools
