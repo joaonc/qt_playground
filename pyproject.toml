@@ -19,10 +19,15 @@ sections = 'FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'
 skip = ['src/ui/forms']
 skip_glob = ['**/.venv*', '**/venv*']
 
+# flake8 not working with pyproject.toml
+#[tool.flake8]
+#max-line-length = 100
+#extend-exclude = 'src/ui/forms,.venv*,venv*,assets,docs,site,__pycache__'
+
 [tool.mypy]
 exclude = [
     'venv*', '.venv*', '.git', '.eggs', 'build', 'dist', '.cache', '.pytest_cache',
-    '.mypy_cache', '.vscode', '.idea', 'tasks.py', 'src/ui'
+    '.mypy_cache', '.vscode', '.idea', 'tasks.py', 'src/ui/forms'
 ]
 python_version = '3.11'
 warn_return_any = true
