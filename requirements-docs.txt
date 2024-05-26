@@ -16,6 +16,7 @@ click==8.1.7
     #   mkdocs
 colorama==0.4.6
     # via
+    #   -c requirements-dev.txt
     #   click
     #   mkdocs
     #   mkdocs-material
