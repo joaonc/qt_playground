@@ -1,6 +1,6 @@
 -r requirements.txt
 
-# Tools
+# Dev tools
 invoke              # Tasks
 pip-tools           # Package management
 pre-commit          # Pre-commit hooks
@@ -14,3 +14,6 @@ mypy                # Code inspector
 
 # Test
 pytest              # Test framework
+
+# Installer
+pyinstaller         # Installer framework
