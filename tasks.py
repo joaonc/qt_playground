@@ -34,6 +34,10 @@ UI_FILES = tuple((ASSETS_DIR / 'ui').glob("**/*.ui"))
 QT ``.ui`` files.
 """
 
+BUILD_IN_FILE = PROJECT_ROOT / 'src' / 'main.py'
+BUILD_WORK_DIR = PROJECT_ROOT / 'build'
+BUILD_DIST_DIR = PROJECT_ROOT / 'dist'
+
 
 def _csstr_to_list(csstr: str) -> list[str]:
     """
@@ -71,6 +75,39 @@ def _get_requirements_files(requirements: str | None, extension: str) -> list[st
     ]
 
     return filenames
+
+
+@task
+def build_clean(c):
+    """
+    Delete files created from previous builds (`build` and `dist` folders).
+    """
+    import shutil
+    for d in [BUILD_WORK_DIR, BUILD_DIST_DIR]:
+        shutil.rmtree(d, ignore_errors=True)
+
+
+@task(build_clean)
+def build_dist(c):
+    """
+    Build the distributable / executable file(s).
+    """
+    c.run(f'pyinstaller --onefile "{BUILD_IN_FILE}" --distpath "{BUILD_DIST_DIR}" --workpath "{BUILD_WORK_DIR}" --specpath "{BUILD_WORK_DIR}"')
+
+
+@task
+def build_run(c):
+    """
+    Run the built package.
+    """
+    import platform
+
+    if platform.system() == 'Windows':
+        pass
+    elif platform.system() == 'Darwin':
+        raise Exit('Running on MacOS still needs to be implemented.')
+    else:
+        raise Exit(f'Running on {platform.system()} is not supported.')
 
 
 @task(
@@ -246,6 +283,10 @@ ns = Collection()  # Main namespace
 test_collection = Collection('test')
 test_collection.add_task(test_unit, 'unit')
 
+build_collection = Collection('build')
+build_collection.add_task(build_clean, 'clean')
+build_collection.add_task(build_dist, 'dist')
+
 lint_collection = Collection('lint')
 lint_collection.add_task(lint_all, 'all')
 lint_collection.add_task(lint_black, 'black')
@@ -272,6 +313,7 @@ ui_collection = Collection('ui')
 ui_collection.add_task(ui_py, 'py')
 ui_collection.add_task(ui_edit, 'edit')
 
+ns.add_collection(build_collection)
 ns.add_collection(lint_collection)
 ns.add_collection(pip_collection)
 ns.add_collection(precommit_collection)
