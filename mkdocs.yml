@@ -3,6 +3,7 @@ site_name: Qt Playground
 nav:
   - Home:
       - Introduction: index.md
+      - Installer: installer.md
 
 theme:
   name: material

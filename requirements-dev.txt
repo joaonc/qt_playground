@@ -4,6 +4,8 @@
 #
 #    pip-compile requirements-dev.in
 #
+altgraph==0.17.4
+    # via pyinstaller
 bandit==1.7.8
     # via -r requirements-dev.in
 black==24.4.2
@@ -54,11 +56,15 @@ packaging==24.0
     # via
     #   black
     #   build
+    #   pyinstaller
+    #   pyinstaller-hooks-contrib
     #   pytest
 pathspec==0.12.1
     # via black
 pbr==6.0.0
     # via stevedore
+pefile==2023.2.7
+    # via pyinstaller
 pip-tools==7.4.1
     # via -r requirements-dev.in
 platformdirs==4.2.1
@@ -75,6 +81,10 @@ pyflakes==3.2.0
     # via flake8
 pygments==2.17.2
     # via rich
+pyinstaller==6.7.0
+    # via -r requirements-dev.in
+pyinstaller-hooks-contrib==2024.6
+    # via pyinstaller
 pyproject-hooks==1.1.0
     # via
     #   build
@@ -92,6 +102,8 @@ pyside6-essentials==6.7.1
     #   pyside6-addons
 pytest==8.2.1
     # via -r requirements-dev.in
+pywin32-ctypes==0.2.2
+    # via pyinstaller
 pyyaml==6.0.1
     # via
     #   bandit
