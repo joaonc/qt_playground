@@ -41,6 +41,19 @@ inv ui.py <file>  # `.ui` extension not required
 inv ui.py <file1>,<file2>
 ```
 
+## Qt Installation
+https://doc.qt.io/qt-6/get-and-install-qt.html
+
+For this project, installed the single developer open source (free) version.
+
+In the _custom setup_ section, there's a _Qt Installation Framework_ that is unchecked by default.
+Checked that box  to install that component, but at this point it's unclear whether that's
+necessary (still learning how to install a Qt app).
+
+See [this video](https://www.youtube.com/watch?v=1pKMcwJZay4) for more details.
+
+Takes a while to download and install.
+
 ## Resources
 * [PySide6 tutorial](https://www.pythonguis.com/pyside6-tutorial/#pyside6-getting-started)
 * [First steps with Qt Designer](https://www.pythonguis.com/tutorials/pyside6-first-steps-qt-designer/)

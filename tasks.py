@@ -83,6 +83,7 @@ def build_clean(c):
     Delete files created from previous builds (`build` and `dist` folders).
     """
     import shutil
+
     for d in [BUILD_WORK_DIR, BUILD_DIST_DIR]:
         shutil.rmtree(d, ignore_errors=True)
 
@@ -92,7 +93,11 @@ def build_dist(c):
     """
     Build the distributable / executable file(s).
     """
-    c.run(f'pyinstaller --onefile "{BUILD_IN_FILE}" --distpath "{BUILD_DIST_DIR}" --workpath "{BUILD_WORK_DIR}" --specpath "{BUILD_WORK_DIR}"')
+    c.run(
+        f'pyinstaller '
+        f'--onefile "{BUILD_IN_FILE}" --distpath "{BUILD_DIST_DIR}" --workpath "{BUILD_WORK_DIR}" '
+        f'--specpath "{BUILD_WORK_DIR}"'
+    )
 
 
 @task
@@ -103,7 +108,12 @@ def build_run(c):
     import platform
 
     if platform.system() == 'Windows':
-        pass
+        exes = list(BUILD_DIST_DIR.glob('**/*.exe'))
+        if len(exes) == 0:
+            raise Exit('No executable found.')
+        elif len(exes) > 1:
+            raise Exit('Multiple executables found.')
+        c.run(str(exes[0]))
     elif platform.system() == 'Darwin':
         raise Exit('Running on MacOS still needs to be implemented.')
     else:
@@ -286,6 +296,7 @@ test_collection.add_task(test_unit, 'unit')
 build_collection = Collection('build')
 build_collection.add_task(build_clean, 'clean')
 build_collection.add_task(build_dist, 'dist')
+build_collection.add_task(build_run, 'run')
 
 lint_collection = Collection('lint')
 lint_collection.add_task(lint_all, 'all')
