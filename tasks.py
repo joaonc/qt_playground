@@ -91,7 +91,7 @@ def build_clean(c):
 @task(build_clean)
 def build_dist(c):
     """
-    Build the distributable / executable file(s).
+    Build the distributable/executable file(s).
     """
     c.run(
         f'pyinstaller '
