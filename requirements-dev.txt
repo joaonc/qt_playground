@@ -100,7 +100,7 @@ pyside6-essentials==6.7.1
     #   -r requirements.txt
     #   pyside6
     #   pyside6-addons
-pytest==8.2.1
+pytest==8.2.2
     # via -r requirements-dev.in
 pywin32-ctypes==0.2.2
     # via pyinstaller
