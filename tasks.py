@@ -146,7 +146,7 @@ def ui_py(c, file=None):
                 f'File "{file}" not found. Available files: {", ".join(p.stem for p in UI_FILES)}'
             )
 
-        py_file_path = PROJECT_ROOT / 'src/ui/forms' / f'{file_stem}_ui.py'
+        py_file_path = PROJECT_ROOT / 'src/ui/forms' / f'ui_{file_stem}.py'
 
         c.run(f'pyside6-uic {ui_file_path} -o {py_file_path}')
 

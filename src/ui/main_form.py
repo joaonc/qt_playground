@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget
 
-from src.ui.forms.main_ui import Ui_mainForm
-from src.ui.forms.show_message_ui import Ui_showMesssageDialog
+from src.ui.forms.ui_main import Ui_mainForm
+from src.ui.forms.ui_show_message import Ui_showMesssageDialog
 
 
 class MainForm(QWidget):
