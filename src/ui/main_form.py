@@ -1,13 +1,13 @@
 from PySide6.QtWidgets import QWidget
 
-from src.ui.forms.ui_main import Ui_mainForm
-from src.ui.forms.ui_show_message import Ui_showMesssageDialog
+from src.ui.forms.ui_main import Ui_MainForm
+from src.ui.forms.ui_show_message import Ui_ShowMesssageDialog
 
 
 class MainForm(QWidget):
     def __init__(self):
         super().__init__()
-        self.ui = Ui_mainForm()
+        self.ui = Ui_MainForm()
         self.ui.setupUi(self)
 
         # UI bindings
@@ -20,6 +20,6 @@ class MainForm(QWidget):
         self.ui.inputLineEdit.clear()
 
     def show_message(self):
-        dialog = Ui_showMesssageDialog()
+        dialog = Ui_ShowMesssageDialog()
         dialog.setupUi(self)
         dialog.messagePlainTextEdit.setPlainText(self.ui.outputPlainTextEdit.toPlainText())
