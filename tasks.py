@@ -153,7 +153,7 @@ def ui_py(c, file=None):
 
         file_path_out = PROJECT_ROOT / 'src/ui/forms' / f'ui_{file_stem}.py'
 
-        c.run(f'pyside6-uic {file_path_in} -o {file_path_out}')
+        c.run(f'pyside6-uic {file_path_in} -o {file_path_out} --from-imports')
 
 
 @task(
