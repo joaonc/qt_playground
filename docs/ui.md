@@ -91,4 +91,6 @@ Notes:
 * If the `.py` files are not in the project's root (which is the common situation), then the flag
   `--from-imports` needs to be used in `pyside-uic` when generating the `ui_*.py` file.
 * Working with resources in Qt Creator is slightly different from Qt Designer, but the flow is the
-  same and everything is similar.
+  same and everything is similar.  
+  In Qt Creator there's the concept of _Project_ and the resource file needs to first be associated
+  with the project to then be used in the `.ui` file.
