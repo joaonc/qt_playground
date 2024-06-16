@@ -16,36 +16,35 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractButton, QApplication, QDialog, QDialogButtonBox,
-    QGridLayout, QPlainTextEdit, QSizePolicy, QWidget)
+    QPlainTextEdit, QSizePolicy, QVBoxLayout, QWidget)
 
 class Ui_ShowMesssageDialog(object):
     def setupUi(self, ShowMesssageDialog):
         if not ShowMesssageDialog.objectName():
             ShowMesssageDialog.setObjectName(u"ShowMesssageDialog")
         ShowMesssageDialog.resize(400, 300)
-        self.gridLayout = QGridLayout(ShowMesssageDialog)
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.messagePlainTextEdit = QPlainTextEdit(ShowMesssageDialog)
-        self.messagePlainTextEdit.setObjectName(u"messagePlainTextEdit")
+        self.vertical_layout = QVBoxLayout(ShowMesssageDialog)
+        self.vertical_layout.setObjectName(u"vertical_layout")
+        self.message_plain_text_edit = QPlainTextEdit(ShowMesssageDialog)
+        self.message_plain_text_edit.setObjectName(u"message_plain_text_edit")
 
-        self.gridLayout.addWidget(self.messagePlainTextEdit, 0, 0, 1, 1)
+        self.vertical_layout.addWidget(self.message_plain_text_edit)
 
-        self.buttonBox = QDialogButtonBox(ShowMesssageDialog)
-        self.buttonBox.setObjectName(u"buttonBox")
-        self.buttonBox.setOrientation(Qt.Orientation.Horizontal)
-        self.buttonBox.setStandardButtons(QDialogButtonBox.StandardButton.Cancel|QDialogButtonBox.StandardButton.Ok)
+        self.button_box = QDialogButtonBox(ShowMesssageDialog)
+        self.button_box.setObjectName(u"button_box")
+        self.button_box.setOrientation(Qt.Orientation.Horizontal)
+        self.button_box.setStandardButtons(QDialogButtonBox.StandardButton.Cancel|QDialogButtonBox.StandardButton.Ok)
 
-        self.gridLayout.addWidget(self.buttonBox, 1, 0, 1, 1)
+        self.vertical_layout.addWidget(self.button_box)
 
 
         self.retranslateUi(ShowMesssageDialog)
-        self.buttonBox.accepted.connect(ShowMesssageDialog.accept)
-        self.buttonBox.rejected.connect(ShowMesssageDialog.reject)
+        self.button_box.accepted.connect(ShowMesssageDialog.accept)
+        self.button_box.rejected.connect(ShowMesssageDialog.reject)
 
         QMetaObject.connectSlotsByName(ShowMesssageDialog)
     # setupUi
 
     def retranslateUi(self, ShowMesssageDialog):
-        ShowMesssageDialog.setWindowTitle(QCoreApplication.translate("ShowMesssageDialog", u"Dialog", None))
+        ShowMesssageDialog.setWindowTitle(QCoreApplication.translate("ShowMesssageDialog", u"Show message", None))
     # retranslateUi
-

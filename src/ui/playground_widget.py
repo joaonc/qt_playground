@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget
 
 from src.ui.forms.ui_playground_widget import Ui_PlaygroundWidget
-from src.ui.forms.ui_show_message_dialog import Ui_ShowMesssageDialog
+from ui.show_message_dialog import ShowMessageDialog
 
 
 class PlaygroundWidget(QWidget, Ui_PlaygroundWidget):
@@ -19,6 +19,7 @@ class PlaygroundWidget(QWidget, Ui_PlaygroundWidget):
         self.inputLineEdit.clear()
 
     def show_message(self):
-        dialog = Ui_ShowMesssageDialog()
-        dialog.setupUi(self)
-        dialog.messagePlainTextEdit.setPlainText(self.outputPlainTextEdit.toPlainText())
+        dialog = ShowMessageDialog()
+        dialog.message_plain_text_edit.setPlainText(self.outputPlainTextEdit.toPlainText())
+        result = dialog.exec()
+        print(result)
