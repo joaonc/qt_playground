@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget
 
 from src.ui.forms.ui_playground_widget import Ui_PlaygroundWidget
-from src.ui.forms.ui_show_message import Ui_ShowMesssageDialog
+from src.ui.forms.ui_show_message_dialog import Ui_ShowMesssageDialog
 
 
 class PlaygroundWidget(QWidget, Ui_PlaygroundWidget):
