@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>showMesssageDialog</class>
- <widget class="QDialog" name="showMesssageDialog">
+ <class>ShowMesssageDialog</class>
+ <widget class="QDialog" name="ShowMesssageDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,14 +11,14 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Show message</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QPlainTextEdit" name="messagePlainTextEdit"/>
+  <layout class="QVBoxLayout" name="vertical_layout">
+   <item>
+    <widget class="QPlainTextEdit" name="message_plain_text_edit"/>
    </item>
-   <item row="1" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
+   <item>
+    <widget class="QDialogButtonBox" name="button_box">
      <property name="orientation">
       <enum>Qt::Orientation::Horizontal</enum>
      </property>
@@ -32,9 +32,9 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>button_box</sender>
    <signal>accepted()</signal>
-   <receiver>showMesssageDialog</receiver>
+   <receiver>ShowMesssageDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -48,9 +48,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>button_box</sender>
    <signal>rejected()</signal>
-   <receiver>showMesssageDialog</receiver>
+   <receiver>ShowMesssageDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

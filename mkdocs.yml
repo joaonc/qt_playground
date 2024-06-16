@@ -4,6 +4,8 @@ nav:
   - Home:
       - Introduction: index.md
       - Installer: installer.md
+      - UI: ui.md
+      - Resources: resources.md
 
 theme:
   name: material

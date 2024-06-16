@@ -34,6 +34,11 @@ UI_FILES = tuple((ASSETS_DIR / 'ui').glob("**/*.ui"))
 QT ``.ui`` files.
 """
 
+QRC_FILES = tuple(ASSETS_DIR.glob("**/*.qrc"))
+"""
+Qt ``.qrc`` resource files.
+"""
+
 BUILD_IN_FILE = PROJECT_ROOT / 'src' / 'main.py'
 BUILD_WORK_DIR = PROJECT_ROOT / 'build'
 BUILD_DIST_DIR = PROJECT_ROOT / 'dist'
@@ -91,7 +96,7 @@ def build_clean(c):
 @task(build_clean)
 def build_dist(c):
     """
-    Build the distributable / executable file(s).
+    Build the distributable/executable file(s).
     """
     c.run(
         f'pyinstaller '
@@ -122,14 +127,14 @@ def build_run(c):
 
 @task(
     help={
-        'file': '`.ui` file to be converted to `.py`. `.ui` extension not required. Can be a comma '
-        'separated. If not supplied, all files will be converted. Available files: '
-        f'{", ".join(p.stem for p in UI_FILES)}.'
+        'file': '`.ui` file to be converted to `.py`. `.ui` extension not required. '
+        'Can be a comma separated. If not supplied, all files will be converted. '
+        f'Available files: {", ".join(p.stem for p in UI_FILES)}.'
     }
 )
 def ui_py(c, file=None):
     """
-    Convert QT `.ui` files into `.py`.
+    Convert Qt `.ui` files into `.py`.
     """
     if file:
         file_stems = [
@@ -140,15 +145,46 @@ def ui_py(c, file=None):
         file_stems = [p.stem for p in UI_FILES]
 
     for file_stem in file_stems:
-        ui_file_path = next((p for p in UI_FILES if p.stem == file_stem), None)
-        if not ui_file_path:
+        file_path_in = next((p for p in UI_FILES if p.stem == file_stem), None)
+        if not file_path_in:
             raise Exit(
                 f'File "{file}" not found. Available files: {", ".join(p.stem for p in UI_FILES)}'
             )
 
-        py_file_path = PROJECT_ROOT / 'src/ui/forms' / f'{file_stem}_ui.py'
+        file_path_out = PROJECT_ROOT / 'src/ui/forms' / f'ui_{file_stem}.py'
 
-        c.run(f'pyside6-uic {ui_file_path} -o {py_file_path}')
+        c.run(f'pyside6-uic {file_path_in} -o {file_path_out} --from-imports')
+
+
+@task(
+    help={
+        'file': '`.qrc` file to be converted to `.py`. `.qrc` extension not required. '
+        'Can be a coma separated list of filenames. If not supplied, all files will be converted. '
+        f'Available files: {", ".join(p.stem for p in QRC_FILES)}.'
+    }
+)
+def ui_rc(c, file=None):
+    """
+    Convert Qt `.qrc` files into `.py`.
+    """
+    if file:
+        file_stems = [
+            (_f2[:-4] if _f2.lower().endswith('.qrc') else _f2)
+            for _f2 in [_f1.strip() for _f1 in file.split(',')]
+        ]
+    else:
+        file_stems = [p.stem for p in QRC_FILES]
+
+    for file_stem in file_stems:
+        file_path_in = next((p for p in QRC_FILES if p.stem == file_stem), None)
+        if not file_path_in:
+            raise Exit(
+                f'File "{file}" not found. Available files: {", ".join(p.stem for p in QRC_FILES)}'
+            )
+
+        file_path_out = PROJECT_ROOT / 'src/ui/forms' / f'{file_stem}_rc.py'
+
+        c.run(f'pyside6-rcc {file_path_in} -o {file_path_out}')
 
 
 @task(
@@ -322,6 +358,7 @@ docs_collection.add_task(docs_deploy, 'deploy')
 
 ui_collection = Collection('ui')
 ui_collection.add_task(ui_py, 'py')
+ui_collection.add_task(ui_rc, 'rc')
 ui_collection.add_task(ui_edit, 'edit')
 
 ns.add_collection(build_collection)
