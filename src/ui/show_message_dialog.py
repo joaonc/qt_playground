@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QDialog
 
-from ui.forms.ui_show_message_dialog import Ui_ShowMesssageDialog
+from src.ui.forms.ui_show_message_dialog import Ui_ShowMesssageDialog
 
 
 class ShowMessageDialog(QDialog, Ui_ShowMesssageDialog):
