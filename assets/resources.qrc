@@ -1,5 +1,6 @@
 <RCC>
   <qresource>
+    <file>images/playground_icon_187860_256.png</file>
     <file>images/playground_icon_187860.svg</file>
   </qresource>
 </RCC>

@@ -1,6 +1,6 @@
 Guidelines on building UI with Qt Designer.
 
-The Qt Designed functionality is also available in Qt Creator, but in this project we're only using
+The Qt Designer functionality is also available in Qt Creator, but in this project we're only using
 Qt Designer and not referencing Qt Creator.
 
 ## Edit `.ui` files
@@ -94,3 +94,18 @@ Notes:
   same and everything is similar.  
   In Qt Creator there's the concept of _Project_ and the resource file needs to first be associated
   with the project to then be used in the `.ui` file.
+  
+!!! Note
+
+    SVG files may not work on some machines if the required dependencies are not installed.  
+    For that reason, working only with PNG, ICO and JPG files.
+
+    For a list of supported formats in the current machine:
+
+    ```python
+    from PySide6.QtGui import QImageReader
+
+    for x in QImageReader.supportedImageFormats():
+        print(x.toStdString())
+    ```
+
