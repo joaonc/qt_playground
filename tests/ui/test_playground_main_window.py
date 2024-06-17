@@ -1,8 +1,8 @@
-from src.ui.playground_widget import PlaygroundWidget
+from ui.playground_main_window import PlaygroundMainWindow
 
 
 def test_enter_text(qtbot):
-    widget = PlaygroundWidget()
+    widget = PlaygroundMainWindow()
     qtbot.addWidget(widget)
 
     widget.input_line_edit.setText('Foo')
