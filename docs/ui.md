@@ -108,4 +108,3 @@ Notes:
     for x in QImageReader.supportedImageFormats():
         print(x.toStdString())
     ```
-
