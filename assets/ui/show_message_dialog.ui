@@ -14,9 +14,8 @@
    <string>Show message</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normalon>:/images/playground_icon_187860.svg</normalon>
-   </iconset>
+   <iconset resource="../resources.qrc">
+    <normaloff>:/images/playground_icon_187860_256.png</normaloff>:/images/playground_icon_187860_256.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="vertical_layout">
    <item>

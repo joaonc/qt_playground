@@ -25,7 +25,7 @@ class Ui_ShowMesssageDialog(object):
             ShowMesssageDialog.setObjectName(u"ShowMesssageDialog")
         ShowMesssageDialog.resize(400, 300)
         icon = QIcon()
-        icon.addFile(u":/images/playground_icon_187860.svg", QSize(), QIcon.Normal, QIcon.On)
+        icon.addFile(u":/images/playground_icon_187860_256.png", QSize(), QIcon.Normal, QIcon.Off)
         ShowMesssageDialog.setWindowIcon(icon)
         self.vertical_layout = QVBoxLayout(ShowMesssageDialog)
         self.vertical_layout.setObjectName(u"vertical_layout")
