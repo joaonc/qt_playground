@@ -14,6 +14,7 @@ mypy                # Code inspector
 
 # Test
 pytest              # Test framework
+pytest-qt           # Qt plugin to allow user interaction
 
 # Installer
 pyinstaller         # Installer framework

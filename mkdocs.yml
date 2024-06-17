@@ -5,6 +5,7 @@ nav:
       - Introduction: index.md
       - Installer: installer.md
       - UI: ui.md
+      - Testing: testing.md
       - Resources: resources.md
 
 theme:
