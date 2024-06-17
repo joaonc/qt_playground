@@ -3,7 +3,7 @@ site_name: Qt Playground
 nav:
   - Home:
       - Introduction: index.md
-      - Installer: installer.md
+      - Distribution: distribution.md
       - UI: ui.md
       - Testing: testing.md
       - Resources: resources.md

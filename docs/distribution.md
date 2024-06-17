@@ -1,6 +1,6 @@
-# Installer
+# Executable / Distribution
 
-How to create the installer for the Qt app.
+How to create the executable file for the Qt app.
 
 ## PyInstaller
 Using [PyInstaller](https://pyinstaller.org/).
@@ -17,6 +17,12 @@ inv --dry build.dist
 This creates an executable file under the `dist` directory.
 
 The executable file is OS dependent, and it applies to the OS it's running under.
+
+The `.spec` file under `assets` is used to specify the options for the creation of the executable.  
+To _not_ use this spec file and instead create one with the default values, use the `--no-spec`
+option (`inv build.dist --no-spec`).
+
+The final file contains all the resources (images, etc.) used by the app.
 
 ## Qt Installer Framework
 Qt provides the [Qt Installer Framework](https://doc.qt.io/qtinstallerframework/ifw-overview.html)

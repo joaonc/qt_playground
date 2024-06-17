@@ -39,6 +39,7 @@ QRC_FILES = tuple(ASSETS_DIR.glob("**/*.qrc"))
 Qt ``.qrc`` resource files.
 """
 
+BUILD_SPEC_FILE = ASSETS_DIR / 'pyinstaller.spec'
 BUILD_IN_FILE = PROJECT_ROOT / 'src' / 'main.py'
 BUILD_WORK_DIR = PROJECT_ROOT / 'build'
 BUILD_DIST_DIR = PROJECT_ROOT / 'dist'
@@ -93,16 +94,28 @@ def build_clean(c):
         shutil.rmtree(d, ignore_errors=True)
 
 
-@task(build_clean)
-def build_dist(c):
+@task(
+    build_clean,
+    help={
+        'no_spec': f'Do not use the spec file `{BUILD_SPEC_FILE.relative_to(PROJECT_ROOT)}` and '
+        f'create one in the `{BUILD_WORK_DIR.relative_to(PROJECT_ROOT)}` directory with defaults.'
+    },
+)
+def build_dist(c, no_spec: bool = False):
     """
     Build the distributable/executable file(s).
     """
-    c.run(
-        f'pyinstaller '
-        f'--onefile "{BUILD_IN_FILE}" --distpath "{BUILD_DIST_DIR}" --workpath "{BUILD_WORK_DIR}" '
-        f'--specpath "{BUILD_WORK_DIR}"'
-    )
+    if no_spec:
+        c.run(
+            f'pyinstaller '
+            f'--onefile "{BUILD_IN_FILE}" --distpath "{BUILD_DIST_DIR}" '
+            f'--workpath "{BUILD_WORK_DIR}" --specpath "{BUILD_WORK_DIR}"'
+        )
+    else:
+        c.run(
+            f'pyinstaller {BUILD_SPEC_FILE} '
+            f'--distpath "{BUILD_DIST_DIR}" --workpath "{BUILD_WORK_DIR}"'
+        )
 
 
 @task
