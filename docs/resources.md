@@ -1,3 +1,5 @@
+Resources (courses, blogs, etc.) for further information on Qt.
+
 ## Qt
 
 * [Qt Designer and Python: Build Your GUI Applications Faster](https://realpython.com/qt-designer-python/)  

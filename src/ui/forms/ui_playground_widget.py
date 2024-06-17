@@ -17,12 +17,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QLineEdit, QPlainTextEdit, QPushButton,
     QSizePolicy, QWidget)
+from . import resources_rc
 
 class Ui_PlaygroundWidget(object):
     def setupUi(self, PlaygroundWidget):
         if not PlaygroundWidget.objectName():
             PlaygroundWidget.setObjectName(u"PlaygroundWidget")
         PlaygroundWidget.resize(328, 299)
+        icon = QIcon()
+        icon.addFile(u":/images/playground_icon_187860_256.png", QSize(), QIcon.Normal, QIcon.Off)
+        PlaygroundWidget.setWindowIcon(icon)
         self.inputLineEdit = QLineEdit(PlaygroundWidget)
         self.inputLineEdit.setObjectName(u"inputLineEdit")
         self.inputLineEdit.setGeometry(QRect(40, 30, 113, 21))

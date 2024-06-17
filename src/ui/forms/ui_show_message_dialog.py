@@ -17,12 +17,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractButton, QApplication, QDialog, QDialogButtonBox,
     QPlainTextEdit, QSizePolicy, QVBoxLayout, QWidget)
+from . import resources_rc
 
 class Ui_ShowMesssageDialog(object):
     def setupUi(self, ShowMesssageDialog):
         if not ShowMesssageDialog.objectName():
             ShowMesssageDialog.setObjectName(u"ShowMesssageDialog")
         ShowMesssageDialog.resize(400, 300)
+        icon = QIcon()
+        icon.addFile(u":/images/playground_icon_187860_256.png", QSize(), QIcon.Normal, QIcon.Off)
+        ShowMesssageDialog.setWindowIcon(icon)
         self.vertical_layout = QVBoxLayout(ShowMesssageDialog)
         self.vertical_layout.setObjectName(u"vertical_layout")
         self.message_plain_text_edit = QPlainTextEdit(ShowMesssageDialog)
@@ -48,3 +52,4 @@ class Ui_ShowMesssageDialog(object):
     def retranslateUi(self, ShowMesssageDialog):
         ShowMesssageDialog.setWindowTitle(QCoreApplication.translate("ShowMesssageDialog", u"Show message", None))
     # retranslateUi
+

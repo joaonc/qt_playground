@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Show message</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/images/playground_icon_187860_256.png</normaloff>:/images/playground_icon_187860_256.png</iconset>
+  </property>
   <layout class="QVBoxLayout" name="vertical_layout">
    <item>
     <widget class="QPlainTextEdit" name="message_plain_text_edit"/>
@@ -29,7 +33,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>button_box</sender>
