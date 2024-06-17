@@ -17,7 +17,7 @@
    <iconset resource="../resources.qrc">
     <normaloff>:/images/playground_icon_187860_256.png</normaloff>:/images/playground_icon_187860_256.png</iconset>
   </property>
-  <widget class="QLineEdit" name="inputLineEdit">
+  <widget class="QLineEdit" name="input_line_edit">
    <property name="geometry">
     <rect>
      <x>40</x>
@@ -33,7 +33,7 @@
     </sizepolicy>
    </property>
   </widget>
-  <widget class="QPushButton" name="messagePushButton">
+  <widget class="QPushButton" name="message_button">
    <property name="geometry">
     <rect>
      <x>190</x>
@@ -46,7 +46,7 @@
     <string>Message</string>
    </property>
   </widget>
-  <widget class="QPlainTextEdit" name="outputPlainTextEdit">
+  <widget class="QPlainTextEdit" name="output_plain_text_edit">
    <property name="geometry">
     <rect>
      <x>40</x>
@@ -56,7 +56,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="showMessagesPushButton">
+  <widget class="QPushButton" name="show_messages_button">
    <property name="geometry">
     <rect>
      <x>169</x>

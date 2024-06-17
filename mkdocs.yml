@@ -5,6 +5,7 @@ nav:
       - Introduction: index.md
       - Installer: installer.md
       - UI: ui.md
+      - Testing: testing.md
       - Resources: resources.md
 
 theme:
@@ -30,8 +31,8 @@ theme:
         icon: material/toggle-switch-off-outline
         name: Switch to light mode
 
-extra_css:
-  - _assets/style.css
+#extra_css:
+#  - _assets/style.css
 
 markdown_extensions:
   - abbr

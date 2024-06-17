@@ -72,7 +72,9 @@ platformdirs==4.2.1
     #   black
     #   virtualenv
 pluggy==1.5.0
-    # via pytest
+    # via
+    #   pytest
+    #   pytest-qt
 pre-commit==3.7.1
     # via -r requirements-dev.in
 pycodestyle==2.11.1
@@ -101,6 +103,10 @@ pyside6-essentials==6.7.1
     #   pyside6
     #   pyside6-addons
 pytest==8.2.2
+    # via
+    #   -r requirements-dev.in
+    #   pytest-qt
+pytest-qt==4.4.0
     # via -r requirements-dev.in
 pywin32-ctypes==0.2.2
     # via pyinstaller
