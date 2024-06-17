@@ -10,16 +10,16 @@ class PlaygroundWidget(QWidget, Ui_PlaygroundWidget):
         self.setupUi(self)
 
         # UI bindings
-        self.messagePushButton.clicked.connect(self.send_message)
-        self.showMessagesPushButton.clicked.connect(self.show_message)
+        self.message_button.clicked.connect(self.send_message)
+        self.show_messages_button.clicked.connect(self.show_message)
 
     def send_message(self):
-        input_text = self.inputLineEdit.text()
-        self.outputPlainTextEdit.appendPlainText(input_text)
-        self.inputLineEdit.clear()
+        input_text = self.input_line_edit.text()
+        self.output_plain_text_edit.appendPlainText(input_text)
+        self.input_line_edit.clear()
 
     def show_message(self):
         dialog = ShowMessageDialog()
-        dialog.message_plain_text_edit.setPlainText(self.outputPlainTextEdit.toPlainText())
+        dialog.message_plain_text_edit.setPlainText(self.output_plain_text_edit.toPlainText())
         result = dialog.exec()
         print(result)
