@@ -6,7 +6,8 @@ nav:
       - Distribution: distribution.md
       - UI: ui.md
       - Testing: testing.md
-      - Resources: resources.md
+      - Tech stack: tech-stack.md
+      - Learning resources: learning-resources.md
 
 theme:
   name: material
