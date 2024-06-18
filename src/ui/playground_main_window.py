@@ -1,10 +1,10 @@
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QMainWindow, QMessageBox
 
-from src.ui.forms.ui_playground_widget import Ui_PlaygroundWidget
+from src.ui.forms.ui_playground_main_window import Ui_PlaygroundMainWindow
 from src.ui.show_message_dialog import ShowMessageDialog
 
 
-class PlaygroundWidget(QWidget, Ui_PlaygroundWidget):
+class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -12,6 +12,8 @@ class PlaygroundWidget(QWidget, Ui_PlaygroundWidget):
         # UI bindings
         self.message_button.clicked.connect(self.send_message)
         self.show_messages_button.clicked.connect(self.show_message)
+        self.action_quit.triggered.connect(self.close)
+        self.action_about.triggered.connect(self.about)
 
     def send_message(self):
         input_text = self.input_line_edit.text()
@@ -23,3 +25,10 @@ class PlaygroundWidget(QWidget, Ui_PlaygroundWidget):
         dialog.message_plain_text_edit.setPlainText(self.output_plain_text_edit.toPlainText())
         result = dialog.exec()
         print(result)
+
+    def about(self):
+        QMessageBox.information(
+            self,
+            'About Qt Playground',
+            'Codebase to learn Qt by example.',
+        )
