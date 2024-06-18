@@ -12,6 +12,8 @@ pyside6-essentials==6.7.1
     # via
     #   pyside6
     #   pyside6-addons
+semantic-version==2.10.0
+    # via -r requirements.in
 shiboken6==6.7.1
     # via
     #   pyside6
