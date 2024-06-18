@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import QMainWindow, QMessageBox
 
+import config
 from src.ui.forms.ui_playground_main_window import Ui_PlaygroundMainWindow
 from src.ui.show_message_dialog import ShowMessageDialog
 
@@ -30,5 +31,5 @@ class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
         QMessageBox.information(
             self,
             'About Qt Playground',
-            'Codebase to learn Qt by example.',
+            f'Codebase to learn Qt by example.\nv {config.version}',
         )

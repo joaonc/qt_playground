@@ -1,0 +1,4 @@
+# App manifest
+
+# App version, as a string. `major.minor.patch` format.
+version: 1.0.0

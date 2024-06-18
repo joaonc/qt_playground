@@ -40,6 +40,7 @@ Qt ``.qrc`` resource files.
 """
 
 BUILD_SPEC_FILE = ASSETS_DIR / 'pyinstaller.spec'
+BUILD_APP_MANIFEST_FILE = ASSETS_DIR / 'app.yaml'
 BUILD_IN_FILE = PROJECT_ROOT / 'src' / 'main.py'
 BUILD_WORK_DIR = PROJECT_ROOT / 'build'
 BUILD_DIST_DIR = PROJECT_ROOT / 'dist'
@@ -105,6 +106,8 @@ def build_dist(c, no_spec: bool = False):
     """
     Build the distributable/executable file(s).
     """
+    import shutil
+
     if no_spec:
         c.run(
             f'pyinstaller '
@@ -116,6 +119,9 @@ def build_dist(c, no_spec: bool = False):
             f'pyinstaller {BUILD_SPEC_FILE} '
             f'--distpath "{BUILD_DIST_DIR}" --workpath "{BUILD_WORK_DIR}"'
         )
+
+    # Copy app manifest file
+    shutil.copy(BUILD_APP_MANIFEST_FILE, BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name)
 
 
 @task
