@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QMainWindow, QMessageBox
 
-import config
+import src.config as config
 from src.ui.forms.ui_playground_main_window import Ui_PlaygroundMainWindow
 from src.ui.show_message_dialog import ShowMessageDialog
 
