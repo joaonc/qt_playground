@@ -1,5 +1,6 @@
 <RCC>
   <qresource>
+    <file>images/cancel-close-cross-delete_icon_114048_512.png</file>
     <file>images/about_icon_512.png</file>
     <file>images/playground_icon_187860_256.png</file>
   </qresource>
