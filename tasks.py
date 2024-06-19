@@ -84,6 +84,20 @@ def _get_requirements_files(requirements: str | None, extension: str) -> list[st
     return filenames
 
 
+def _calculate_sha1(file_path):
+    import hashlib
+
+    # Initialize SHA1 hash object
+    hasher = hashlib.sha1()
+
+    with open(file_path, 'rb') as file:
+        # Read and update hash in chunks of 4K
+        for byte_block in iter(lambda: file.read(4096), b''):
+            hasher.update(byte_block)
+
+    return hasher.hexdigest()
+
+
 @task
 def build_clean(c):
     """
@@ -99,13 +113,15 @@ def build_clean(c):
     build_clean,
     help={
         'no_spec': f'Do not use the spec file `{BUILD_SPEC_FILE.relative_to(PROJECT_ROOT)}` and '
-        f'create one in the `{BUILD_WORK_DIR.relative_to(PROJECT_ROOT)}` directory with defaults.'
+        f'create one in the `{BUILD_WORK_DIR.relative_to(PROJECT_ROOT)}` directory with defaults.',
+        'no_manifest': 'Do not create a manifest file. Creating it requires the `pyyaml` package.',
     },
 )
-def build_dist(c, no_spec: bool = False):
+def build_dist(c, no_spec: bool = False, no_manifest: bool = False):
     """
     Build the distributable/executable file(s).
     """
+    import re
     import shutil
 
     if no_spec:
@@ -114,14 +130,36 @@ def build_dist(c, no_spec: bool = False):
             f'--onefile "{BUILD_IN_FILE}" --distpath "{BUILD_DIST_DIR}" '
             f'--workpath "{BUILD_WORK_DIR}" --specpath "{BUILD_WORK_DIR}"'
         )
+        file_name = BUILD_IN_FILE.stem
     else:
         c.run(
             f'pyinstaller {BUILD_SPEC_FILE} '
             f'--distpath "{BUILD_DIST_DIR}" --workpath "{BUILD_WORK_DIR}"'
         )
+        spec_text = BUILD_SPEC_FILE.read_text()
+        match = re.match("""name ?= ?['"](.*)['"]""", spec_text, re.MULTILINE)
+        if match:
+            file_name = match.group(0)
+        else:
+            c.echo(f'App file name not found in spec file {BUILD_SPEC_FILE}')
+            file_name = None
 
-    # Copy app manifest file
-    shutil.copy(BUILD_APP_MANIFEST_FILE, BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name)
+    # App manifest file
+    if no_manifest or not file_name:
+        c.echo('App manifest file not created.')
+    if not no_manifest:
+        from datetime import datetime, timezone
+        import yaml
+
+        file_sha1 = _calculate_sha1()
+
+        with open(BUILD_APP_MANIFEST_FILE) as f:
+            manifest = yaml.safe_load(f)
+        manifest['build_time'] = datetime.now(timezone.utc)
+        with open(BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name, 'w') as f:
+            f.write('# App manifest\n\n')
+            yaml.safe_dump(manifest, f)
+        # shutil.copy(BUILD_APP_MANIFEST_FILE, BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name)
 
 
 @task
