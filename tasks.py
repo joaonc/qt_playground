@@ -130,32 +130,41 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False):
             f'--onefile "{BUILD_IN_FILE}" --distpath "{BUILD_DIST_DIR}" '
             f'--workpath "{BUILD_WORK_DIR}" --specpath "{BUILD_WORK_DIR}"'
         )
-        file_name = BUILD_IN_FILE.stem
     else:
         c.run(
             f'pyinstaller {BUILD_SPEC_FILE} '
             f'--distpath "{BUILD_DIST_DIR}" --workpath "{BUILD_WORK_DIR}"'
         )
-        spec_text = BUILD_SPEC_FILE.read_text()
-        match = re.match("""name ?= ?['"](.*)['"]""", spec_text, re.MULTILINE)
-        if match:
-            file_name = match.group(0)
-        else:
-            c.echo(f'App file name not found in spec file {BUILD_SPEC_FILE}')
-            file_name = None
+
+    # Verify app file was built
+    # Assumes the distribution directory is empty prior to creating the app
+    files = [f for f in BUILD_DIST_DIR.glob('*') if f.is_file()]
+    if not files:
+        Exit(f'App file not found in {BUILD_DIST_DIR}')
+    if len(files) > 1:
+        Exit(
+            f'{len(files)} files found in the distribution folder {BUILD_DIST_DIR}. '
+            f'One file expected.'
+        )
 
     # App manifest file
-    if no_manifest or not file_name:
+    if no_manifest:
         c.echo('App manifest file not created.')
-    if not no_manifest:
+    else:
         from datetime import datetime, timezone
         import yaml
 
-        file_sha1 = _calculate_sha1()
+        app_file = files[0]
+        file_sha1 = _calculate_sha1(app_file)
 
         with open(BUILD_APP_MANIFEST_FILE) as f:
             manifest = yaml.safe_load(f)
-        manifest['build_time'] = datetime.now(timezone.utc)
+        manifest |= {
+            'build_time': datetime.now(timezone.utc),
+            'file_name': app_file.name,
+            'file_sha1': file_sha1,
+        }
+
         with open(BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name, 'w') as f:
             f.write('# App manifest\n\n')
             yaml.safe_dump(manifest, f)
