@@ -1,12 +1,13 @@
 import logging
 import sys
+import types
+from pathlib import Path
 
 from PySide6.QtWidgets import QApplication
 
-from src.ui.playground_main_window import PlaygroundMainWindow
-import src.update.update as update
 import src.config as config
-from pathlib import Path
+import src.update.update as update
+from src.ui.playground_main_window import PlaygroundMainWindow
 
 
 def main():
@@ -90,9 +91,18 @@ def set_config_values():
     config.no_check_update = args.no_check_update
     config.check_update_only = args.check_update_only
     if args.update_manifest:
-        config.update_manifest = args.update_manifest
+        config.update_manifest = Path(args.update_manifest).resolve(strict=False)
     if args.update_file:
-        config.update_file = args.update_file
+        config.update_file = Path(args.update_file).resolve(strict=False)
+
+    # Config contents
+    config_dict = {
+        key: getattr(config, key, '__UNDEFINED__')
+        for key in sorted(dir(config))
+        if not key.startswith('_')
+        and type(getattr(config, key)) not in [types.FunctionType, types.ModuleType, type]
+    }
+    logging.debug(f'Config:\n' + '\n'.join(f'    {key}: {val}' for key, val in config_dict.items()))
 
 
 if __name__ == '__main__':

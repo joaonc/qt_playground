@@ -1,8 +1,14 @@
+import sys
 from pathlib import Path
 
-import sys
 import yaml
 from semantic_version import Version
+
+
+def read_manifest_file(manifest) -> dict:
+    with open(manifest) as f:
+        return yaml.safe_load(f)
+
 
 IS_BUNDLED_APP = getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS')
 """
@@ -19,8 +25,7 @@ else:
 ASSETS_DIR = PROJECT_ROOT / 'assets'
 APP_MANIFEST_FILE = ASSETS_DIR / 'app.yaml'
 
-with open(APP_MANIFEST_FILE) as f:
-    app_manifest = yaml.safe_load(f)
+app_manifest = read_manifest_file(APP_MANIFEST_FILE)
 
 version = Version(app_manifest['version'])
 """App version."""

@@ -1,15 +1,9 @@
 import os
 import sys
 
-import yaml
 from semantic_version import Version
 
 import src.config as config
-
-
-def read_manifest_file(manifest) -> dict:
-    with open(manifest) as f:
-        return yaml.safe_load(f)
 
 
 def check_update(update_manifest=None) -> tuple[bool, Version]:
@@ -20,7 +14,7 @@ def check_update(update_manifest=None) -> tuple[bool, Version]:
     :return:
     """
     update_manifest = update_manifest or config.update_manifest
-    new_app = read_manifest_file(update_manifest)
+    new_app = config.read_manifest_file(update_manifest)
     new_app_version = Version(new_app['version'])
     return config.version < new_app_version, new_app_version
 
