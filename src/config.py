@@ -30,7 +30,7 @@ app_manifest = read_manifest_file(APP_MANIFEST_FILE)
 version = Version(app_manifest['version'])
 """App version."""
 
-no_check_update = False
+check_update = True
 check_update_only = False
 update_manifest = None
 update_file = None

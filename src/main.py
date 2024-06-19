@@ -3,7 +3,7 @@ import shutil
 import sys
 import types
 from pathlib import Path
-
+import subprocess
 from PySide6.QtWidgets import QApplication
 
 import src.config as config
@@ -20,13 +20,15 @@ def main():
         app_response = app.exec()
         if app_response != 0:
             logging.error(f'An error occurred. Exiting with status {app_response}.')
-            if not config.no_check_update:
+            if not config.check_update:
                 logging.warning('Not checking for app update.')
             sys.exit(app_response)
 
-    if not config.no_check_update or config.check_update_only:
+    if config.check_update or config.check_update_only:
         try:
             need_update, version_update = update.check_update(config.update_manifest)
+            if version_update is None:
+                logging.warning(f'Manifest file to update not specified.')
         except FileNotFoundError:
             logging.warning(
                 f'Manifest for file to update not found: {config.update_manifest}\n'
@@ -36,16 +38,23 @@ def main():
 
         if need_update:
             logging.info(f'Performing update to version {version_update}.')
-            try:
-                update.perform_update()
-            except FileNotFoundError:
-                logging.warning(f'File {config.update_file} not found. Update failed.')
-            except shutil.SameFileError:
-                logging.warning(
-                    f'Update and current files are the same: {config.update_file}. Update failed.'
-                )
-            except Exception as e:
-                logging.warning(f'Unexpected error when updating. Update failed.\n{e}')
+
+            # Code below tries to overwrite the app currently in use, causing an error.
+            # try:
+            #     update.perform_update()
+            # except FileNotFoundError:
+            #     logging.warning(f'File {config.update_file} not found. Update failed.')
+            # except shutil.SameFileError:
+            #     logging.warning(
+            #         f'Update and current files are the same: {config.update_file}. Update failed.'
+            #     )
+            # except Exception as e:
+            #     logging.warning(f'Unexpected error when updating. Update failed.\n{e}')
+
+            logging.info('Update will be performed after this app exits.')
+            result = subprocess.run(['python', '-m', '--current-file', sys.executable])
+        else:
+            logging.info('No update required.')
 
 
 def set_config_values():
@@ -55,10 +64,10 @@ def set_config_values():
 
     parser = ArgumentParser(description=description, formatter_class=RawTextHelpFormatter)
     parser.add_argument(
-        '--no-check-update',
+        '--check-update',
         action=BooleanOptionalAction,
-        default=False,
-        help='Do not check for app updates.',
+        default=True,
+        help='Check for app updates.',
     )
     parser.add_argument(
         '--check-update-only',
@@ -92,9 +101,12 @@ def set_config_values():
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.getLevelName(args.log_level.upper()))
-    logging.debug(f'App version {config.version}. Log level {args.log_level}.\n{sys.executable}')
+    logging.debug(
+        f'Qt Playground.\n  App version: {config.version}.\n  Log level: {args.log_level}.\n  '
+        f'File: {sys.executable}'
+    )
 
-    config.no_check_update = args.no_check_update
+    config.check_update = args.check_update
     config.check_update_only = args.check_update_only
     if args.update_manifest:
         config.update_manifest = Path(args.update_manifest).resolve(strict=False)
@@ -108,9 +120,10 @@ def set_config_values():
         if not key.startswith('_')
         and type(getattr(config, key)) not in [types.FunctionType, types.ModuleType, type]
     }
-    logging.debug(f'Config:\n' + '\n'.join(f'    {key}: {val}' for key, val in config_dict.items()))
+    logging.debug(f'Config:\n' + '\n'.join(f'  {key}: {val}' for key, val in config_dict.items()))
 
 
 if __name__ == '__main__':
     set_config_values()
     main()
+    logging.debug('App exiting.')

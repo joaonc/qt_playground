@@ -121,9 +121,6 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False):
     """
     Build the distributable/executable file(s).
     """
-    import re
-    import shutil
-
     if no_spec:
         c.run(
             f'pyinstaller '
@@ -168,7 +165,6 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False):
         with open(BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name, 'w') as f:
             f.write('# App manifest\n\n')
             yaml.safe_dump(manifest, f)
-        # shutil.copy(BUILD_APP_MANIFEST_FILE, BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name)
 
 
 @task
