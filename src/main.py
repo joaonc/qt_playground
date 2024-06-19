@@ -1,4 +1,5 @@
 import logging
+import shutil
 import sys
 import types
 from pathlib import Path
@@ -25,7 +26,6 @@ def main():
 
     if not config.no_check_update or config.check_update_only:
         try:
-            # update_manifest = Path(__file__).parent / 'app.yaml'
             need_update, version_update = update.check_update(config.update_manifest)
         except FileNotFoundError:
             logging.warning(
@@ -37,9 +37,15 @@ def main():
         if need_update:
             logging.info(f'Performing update to version {version_update}.')
             try:
-                update.perform_update(config.update_file)
+                update.perform_update()
             except FileNotFoundError:
                 logging.warning(f'File {config.update_file} not found. Update failed.')
+            except shutil.SameFileError:
+                logging.warning(
+                    f'Update and current files are the same: {config.update_file}. Update failed.'
+                )
+            except Exception as e:
+                logging.warning(f'Unexpected error when updating. Update failed.\n{e}')
 
 
 def set_config_values():
@@ -73,7 +79,7 @@ def set_config_values():
     parser.add_argument(
         '--log-level',
         choices=[level.lower() for level in logging.getLevelNamesMapping()],
-        default='info',
+        default='error',
         help='Log level to use.',
     )
     parser.add_argument(
@@ -86,7 +92,7 @@ def set_config_values():
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.getLevelName(args.log_level.upper()))
-    logging.debug(f'App version {config.version}. Log level {args.log_level}.')
+    logging.debug(f'App version {config.version}. Log level {args.log_level}.\n{sys.executable}')
 
     config.no_check_update = args.no_check_update
     config.check_update_only = args.check_update_only

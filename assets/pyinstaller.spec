@@ -7,7 +7,7 @@
 from pathlib import Path
 
 PROJECT_ROOT = Path(SPECPATH).parent.resolve(strict=True)
-SOURCE_DIR = (PROJECT_ROOT / 'src')
+SOURCE_DIR = PROJECT_ROOT / 'src'
 ASSETS_DIR = PROJECT_ROOT / 'assets'
 APP_MANIFEST_FILE = ASSETS_DIR / 'app.yaml'
 
@@ -17,7 +17,7 @@ a = Analysis(
     pathex=[],
     binaries=[],
     # https://pyinstaller.org/en/stable/spec-files.html#adding-data-files
-    datas=[(str(APP_MANIFEST_FILE), ASSETS_DIR.relative_to(PROJECT_ROOT))],
+    datas=[(str(APP_MANIFEST_FILE), str(ASSETS_DIR.relative_to(PROJECT_ROOT)))],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

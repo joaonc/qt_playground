@@ -32,5 +32,5 @@ version = Version(app_manifest['version'])
 
 no_check_update = False
 check_update_only = False
-update_manifest = Path('app.yaml')
-update_file = Path('qt_playground.exe')
+update_manifest = None
+update_file = None

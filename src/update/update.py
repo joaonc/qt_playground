@@ -1,5 +1,8 @@
+import shutil
+import logging
 import os
 import sys
+from pathlib import Path
 
 from semantic_version import Version
 
@@ -14,13 +17,15 @@ def check_update(update_manifest=None) -> tuple[bool, Version]:
     :return:
     """
     update_manifest = update_manifest or config.update_manifest
-    new_app = config.read_manifest_file(update_manifest)
-    new_app_version = Version(new_app['version'])
+    update_manifest_dict = config.read_manifest_file(update_manifest)
+    new_app_version = Version(update_manifest_dict['version'])
+
     return config.version < new_app_version, new_app_version
 
 
-def perform_update(file):
-    # Get current working directory
-    cwd = os.getcwd()
-    # Get the path of the currently running script
-    script_path = os.path.realpath(sys.argv[0])
+def perform_update(update_file=None):
+    if not config.IS_BUNDLED_APP:
+        raise Exception('Update only works when running the bundled (executable) app.')
+
+    update_file = update_file or config.update_file
+    shutil.copy(update_file, sys.executable)
