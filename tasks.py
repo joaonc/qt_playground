@@ -40,6 +40,7 @@ Qt ``.qrc`` resource files.
 """
 
 BUILD_SPEC_FILE = ASSETS_DIR / 'pyinstaller.spec'
+BUILD_APP_MANIFEST_FILE = ASSETS_DIR / 'app.yaml'
 BUILD_IN_FILE = PROJECT_ROOT / 'src' / 'main.py'
 BUILD_WORK_DIR = PROJECT_ROOT / 'build'
 BUILD_DIST_DIR = PROJECT_ROOT / 'dist'
@@ -83,6 +84,20 @@ def _get_requirements_files(requirements: str | None, extension: str) -> list[st
     return filenames
 
 
+def _calculate_sha1(file_path):
+    import hashlib
+
+    # Initialize SHA1 hash object
+    hasher = hashlib.sha1()
+
+    with open(file_path, 'rb') as file:
+        # Read and update hash in chunks of 4K
+        for byte_block in iter(lambda: file.read(4096), b''):
+            hasher.update(byte_block)
+
+    return hasher.hexdigest()
+
+
 @task
 def build_clean(c):
     """
@@ -98,10 +113,11 @@ def build_clean(c):
     build_clean,
     help={
         'no_spec': f'Do not use the spec file `{BUILD_SPEC_FILE.relative_to(PROJECT_ROOT)}` and '
-        f'create one in the `{BUILD_WORK_DIR.relative_to(PROJECT_ROOT)}` directory with defaults.'
+        f'create one in the `{BUILD_WORK_DIR.relative_to(PROJECT_ROOT)}` directory with defaults.',
+        'no_manifest': 'Do not create a manifest file. Creating it requires the `pyyaml` package.',
     },
 )
-def build_dist(c, no_spec: bool = False):
+def build_dist(c, no_spec: bool = False, no_manifest: bool = False):
     """
     Build the distributable/executable file(s).
     """
@@ -116,6 +132,39 @@ def build_dist(c, no_spec: bool = False):
             f'pyinstaller {BUILD_SPEC_FILE} '
             f'--distpath "{BUILD_DIST_DIR}" --workpath "{BUILD_WORK_DIR}"'
         )
+
+    # Verify app file was built
+    # Assumes the distribution directory is empty prior to creating the app
+    files = [f for f in BUILD_DIST_DIR.glob('*') if f.is_file()]
+    if not files:
+        Exit(f'App file not found in {BUILD_DIST_DIR}')
+    if len(files) > 1:
+        Exit(
+            f'{len(files)} files found in the distribution folder {BUILD_DIST_DIR}. '
+            f'One file expected.'
+        )
+
+    # App manifest file
+    if no_manifest:
+        c.echo('App manifest file not created.')
+    else:
+        from datetime import datetime, timezone
+        import yaml
+
+        app_file = files[0]
+        file_sha1 = _calculate_sha1(app_file)
+
+        with open(BUILD_APP_MANIFEST_FILE) as f:
+            manifest = yaml.safe_load(f)
+        manifest |= {
+            'build_time': datetime.now(timezone.utc),
+            'file_name': app_file.name,
+            'file_sha1': file_sha1,
+        }
+
+        with open(BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name, 'w') as f:
+            f.write('# App manifest\n\n')
+            yaml.safe_dump(manifest, f)
 
 
 @task
