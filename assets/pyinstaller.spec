@@ -6,16 +6,18 @@
 
 from pathlib import Path
 
-PROJECT_ROOT = Path(SPECPATH).parent
+PROJECT_ROOT = Path(SPECPATH).parent.resolve(strict=True)
+SOURCE_DIR = (PROJECT_ROOT / 'src')
+ASSETS_DIR = PROJECT_ROOT / 'assets'
+APP_MANIFEST_FILE = ASSETS_DIR / 'app.yaml'
 
-# Absolute path to the source code directory
-SOURCE_DIR = (PROJECT_ROOT / 'src').absolute()
 
 a = Analysis(
     [str(SOURCE_DIR / 'main.py')],
     pathex=[],
     binaries=[],
-    datas=[],
+    # https://pyinstaller.org/en/stable/spec-files.html#adding-data-files
+    datas=[(str(APP_MANIFEST_FILE), ASSETS_DIR.relative_to(PROJECT_ROOT))],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
