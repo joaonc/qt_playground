@@ -34,3 +34,4 @@ check_update = True
 check_update_only = False
 update_manifest = None
 update_file = None
+backup_file = None

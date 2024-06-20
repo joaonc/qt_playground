@@ -1,9 +1,7 @@
 import logging
-import shutil
 import sys
 import types
 from pathlib import Path
-import subprocess
 from PySide6.QtWidgets import QApplication
 
 import src.config as config
@@ -12,18 +10,17 @@ from src.ui.playground_main_window import PlaygroundMainWindow
 
 
 def main():
+    # Launch UI
     if not config.check_update_only:
-        # Launch UI
         app = QApplication()
         window = PlaygroundMainWindow()
         window.show()
         app_response = app.exec()
         if app_response != 0:
             logging.error(f'An error occurred. Exiting with status {app_response}.')
-            if not config.check_update:
-                logging.warning('Not checking for app update.')
             sys.exit(app_response)
 
+    # Update
     if config.check_update or config.check_update_only:
         try:
             need_update, version_update = update.check_update(config.update_manifest)
@@ -32,29 +29,25 @@ def main():
         except FileNotFoundError:
             logging.warning(
                 f'Manifest for file to update not found: {config.update_manifest}\n'
-                f'Not performing an update check.'
+                f'Not checking for app update.'
             )
             need_update, version_update = False, None
 
         if need_update:
-            logging.info(f'Performing update to version {version_update}.')
+            logging.info(f'Updating to version {version_update}.')
 
-            # Code below tries to overwrite the app currently in use, causing an error.
-            # try:
-            #     update.perform_update()
-            # except FileNotFoundError:
-            #     logging.warning(f'File {config.update_file} not found. Update failed.')
-            # except shutil.SameFileError:
-            #     logging.warning(
-            #         f'Update and current files are the same: {config.update_file}. Update failed.'
-            #     )
-            # except Exception as e:
-            #     logging.warning(f'Unexpected error when updating. Update failed.\n{e}')
-
-            logging.info('Update will be performed after this app exits.')
-            result = subprocess.run(['python', '-m', '--current-file', sys.executable])
+            try:
+                update.perform_update()
+                logging.info(
+                    'Update was successful and the new version will be used the next time '
+                    'the app runs.'
+                )
+            except Exception as e:
+                logging.warning(f'Error updating.\n{e}')
         else:
             logging.info('No update required.')
+    else:
+        logging.info('Not checking for app update.')
 
 
 def set_config_values():

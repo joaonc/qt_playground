@@ -1,9 +1,13 @@
 import shutil
 import sys
+from datetime import datetime
 
 from semantic_version import Version
 
 import src.config as config
+
+
+class FileUpdateError(Exception): ...
 
 
 def check_update(update_manifest=None) -> tuple[bool, Version | None]:
@@ -30,11 +34,50 @@ def check_update(update_manifest=None) -> tuple[bool, Version | None]:
 
 
 def perform_update(update_file=None):
+    """
+
+    The file can't be updated with a simple copy because the app is running, thus locking the file.
+
+    The key is that the file *can* be renamed (even while locked) and then a new file can be copied/
+    moved in its place. On the next app start, it will be running the new version.
+
+    1. Rename currently running file (to ``.bak``).
+    2. Copy new version to where the currently running version is (before the rename).
+    3. Re-launch the app.
+
+    :param update_file: File to update to.
+
+    :raises EnvironmentError: Running as a Python script. Code needs to be running as executable
+        bundled with PyInstaller.
+    :raises FileNotFoundError: Update file not found.
+    :raises FileUpdateError: Error on update and rolled back. Info on the underlying error included.
+    :raises ValueError: Update file not specified either in the parameter of this function or in
+        the ``config`` module.
+    """
     if not config.IS_BUNDLED_APP:
-        raise Exception('Update only works when running the bundled (executable) app.')
+        raise EnvironmentError('Update only works when running the bundled (executable) app.')
 
     update_file = update_file or config.update_file
-    shutil.copy(update_file, sys.executable)
+    if not update_file:
+        raise ValueError('Update file not set.')
+    if not (update_file := Path(update_file)).exists():
+        raise FileNotFoundError(f'Update file not found: {update_file}')
+
+    current_file = Path(sys.executable).resolve()
+
+    # Rename currently running app
+    backup_file = current_file.rename(
+        current_file.parent / f'{current_file.stem}.bak_{datetime.now().timestamp()}'
+    )
+    config.backup_file = backup_file
+
+    # Substitute with new file
+    try:
+        shutil.copy(update_file, current_file)
+    except Exception as e:
+        # Something happened, rollback
+        backup_file.rename(current_file)
+        raise FileUpdateError('Error updating executable file. Rolled back.') from e
 
 
 if __name__ == '__main__':
