@@ -4,11 +4,11 @@
 #
 #    pip-compile requirements.in
 #
-pyside6==6.7.1
+pyside6==6.7.2
     # via -r requirements.in
-pyside6-addons==6.7.1
+pyside6-addons==6.7.2
     # via pyside6
-pyside6-essentials==6.7.1
+pyside6-essentials==6.7.2
     # via
     #   pyside6
     #   pyside6-addons
@@ -16,7 +16,7 @@ pyyaml==6.0.1
     # via -r requirements.in
 semantic-version==2.10.0
     # via -r requirements.in
-shiboken6==6.7.1
+shiboken6==6.7.2
     # via
     #   pyside6
     #   pyside6-addons
