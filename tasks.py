@@ -149,6 +149,7 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False):
         c.echo('App manifest file not created.')
     else:
         from datetime import datetime, timezone
+
         import yaml
 
         app_file = files[0]

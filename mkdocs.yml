@@ -5,6 +5,7 @@ nav:
       - Introduction: index.md
       - Distribution: distribution.md
       - UI: ui.md
+      - Updating: updating.md
       - Testing: testing.md
       - Tech stack: tech-stack.md
       - Learning resources: learning-resources.md
