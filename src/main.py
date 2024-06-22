@@ -2,6 +2,7 @@ import logging
 import sys
 import types
 from pathlib import Path
+
 from PySide6.QtWidgets import QApplication
 
 import src.config as config
