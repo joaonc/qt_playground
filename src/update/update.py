@@ -54,7 +54,7 @@ def perform_update(update_file=None):
     :raises ValueError: Update file not specified either in the parameter of this function or in
         the ``config`` module.
     """
-    if not config.IS_BUNDLED_APP:
+    if not config.IS_BUNDLED_APP and not config.IGNORE_BUNDLED_APP:
         raise EnvironmentError('Update only works when running the bundled (executable) app.')
 
     update_file = update_file or config.update_file
