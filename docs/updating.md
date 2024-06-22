@@ -44,6 +44,19 @@ Note: Example below is for PowerShell. Use `\` as line separator for Mac and Lin
 --update-file "../dist_test/qt_playground_101.exe"
 ```
 
+To update:
+
+1. Create a newer version of the app.
+   1. Update `assets/app.yaml > version` to a higher value.
+   2. Build the distributable file with `inv build.dist`  
+      This creates a file under the `dist` directory with the name set in
+      `assets/pyinstaller.spec > exe > name` (`qt_playground` is what is currently set to).
+2. Copy that newer version file to a separate directory, ex. `dist_test`.  
+   The file can be left in the same folder, but running `inv build.dist` deletes the contents of
+   `dist`, so it's best to move it somewhere else.
+3. Run the current version with the `--update-manifest` and `--update-file` options set.  
+   See example above.
+
 ## Checking app version
 There are two ways to check the app version:
 
