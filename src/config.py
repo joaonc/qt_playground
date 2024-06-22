@@ -24,7 +24,7 @@ More info at https://pyinstaller.org/en/stable/runtime-information.html
 
 IGNORE_BUNDLED_APP = is_truthy(os.environ.get('QT_PLAYGROUND_IGNORE_BUNDLED_APP', 'False'))
 """
-Ignore ``IS_BUNDLED_APP``, ie, code that is supposed to execute only as a bundled app can run as
+Ignore ``IS_BUNDLED_APP``, ie, code that is supposed to execute only as a bundled app will run as
 script also.
 
 To be used for debugging purposes.
