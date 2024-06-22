@@ -86,27 +86,27 @@ if __name__ == '__main__':
     from argparse import ArgumentParser, RawTextHelpFormatter
     from pathlib import Path
 
-    description = f'App updater.'
+    description_ = f'App updater.'
 
-    parser = ArgumentParser(description=description, formatter_class=RawTextHelpFormatter)
-    parser.add_argument(
+    parser_ = ArgumentParser(description=description_, formatter_class=RawTextHelpFormatter)
+    parser_.add_argument(
         '--current-file',
         type=str,
         help='Path to existing file to be updated.',
     )
-    parser.add_argument(
+    parser_.add_argument(
         '--update-file',
         type=str,
         help='Path to new file to update to.',
     )
-    parser.add_argument(
+    parser_.add_argument(
         '--log-level',
         choices=[level.lower() for level in logging.getLevelNamesMapping()],
         default='info',
         help='Log level to use.',
     )
 
-    args = parser.parse_args()
+    args = parser_.parse_args()
 
     logging.basicConfig(
         format='%(asctime)s - %(levelname)s - %(message)s',
@@ -114,15 +114,15 @@ if __name__ == '__main__':
         datefmt='%Y-%m-%d %H:%M:%S',
     )
 
-    current_file = Path(args.current_file).resolve()
-    update_file = Path(args.update_file).resolve()
-    logging.info(f'Updating app.\n  Current file: {current_file}\n  Update file: {update_file}')
+    current_file_ = Path(args.current_file).resolve()
+    update_file_ = Path(args.update_file).resolve()
+    logging.info(f'Updating app.\n  Current file: {current_file_}\n  Update file: {update_file_}')
 
-    success = False
+    success_ = False
     while (tries := 5) > 0:
         try:
             shutil.copy(args.update_file, args.current_file)
-            success = True
+            success_ = True
             break
         except shutil.SameFileError as e:
             # Process still in use. Try again.
@@ -130,7 +130,7 @@ if __name__ == '__main__':
             time.sleep(0.5)
             tries -= 1
 
-    if not success:
+    if not success_:
         logging.error('Unable to update.')
         sys.exit(1)
     logging.info('Update successful.')
