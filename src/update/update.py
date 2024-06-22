@@ -1,3 +1,4 @@
+import logging
 import shutil
 import sys
 from datetime import datetime
@@ -65,17 +66,27 @@ def perform_update(update_file=None):
         raise FileNotFoundError(f'Update file not found: {update_file}')
 
     current_file = Path(sys.executable).resolve()
+    logging.debug(f'Updating file {current_file}')
 
     # Rename currently running app
-    backup_file = current_file.rename(
-        current_file.parent / f'{current_file.stem}.bak_{datetime.now().timestamp()}'
+    backup_file_path = (
+        current_file.parent / f'{current_file.stem}.bak_{int(datetime.now().timestamp())}'
     )
-    config.backup_file = backup_file
+    logging.debug(f'Backing up file to {backup_file_path}')
+    if not config.IGNORE_UPDATE:
+        backup_file = current_file.rename(backup_file_path)
+        config.backup_file = backup_file
+    else:
+        logging.debug('Not backing up file due to `QT_PLAYGROUND_IGNORE_UPDATE` being set.')
 
-    # Substitute with new file
+# Substitute with new file
     try:
-        shutil.copy(update_file, current_file)
+        logging.debug(f'Copying new version from {update_file}')
+        if not config.IGNORE_UPDATE:
+            shutil.copy(update_file, current_file)
+        else:
+            logging.debug('Not copying file due to `QT_PLAYGROUND_IGNORE_UPDATE` being set.')
     except Exception as e:
-        # Something happened, rollback
-        backup_file.rename(current_file)
+        logging.debug('Update failed, rolling back.')
+        backup_file.rename(current_file)  # noqa
         raise FileUpdateError('Error updating executable file. Rolled back.') from e
