@@ -114,10 +114,11 @@ def build_clean(c):
     help={
         'no_spec': f'Do not use the spec file `{BUILD_SPEC_FILE.relative_to(PROJECT_ROOT)}` and '
         f'create one in the `{BUILD_WORK_DIR.relative_to(PROJECT_ROOT)}` directory with defaults.',
-        'no_manifest': 'Do not create a manifest file. Creating it requires the `pyyaml` package.',
+        'no_manifest': 'Do not create a manifest file.',
+        'no_zip': 'Do not create a ZIP file, which can be used to upload to a GitHub release.',
     },
 )
-def build_dist(c, no_spec: bool = False, no_manifest: bool = False):
+def build_dist(c, no_spec: bool = False, no_manifest: bool = False, no_zip: bool = False):
     """
     Build the distributable/executable file(s).
     """
@@ -143,29 +144,43 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False):
             f'{len(files)} files found in the distribution folder {BUILD_DIST_DIR}. '
             f'One file expected.'
         )
+    app_file = files[0]
+    manifest_file = None
 
     # App manifest file
     if no_manifest:
-        c.echo('App manifest file not created.')
+        print('App manifest file not created.')
     else:
         from datetime import datetime, timezone
 
         import yaml
-
-        app_file = files[0]
-        file_sha1 = _calculate_sha1(app_file)
 
         with open(BUILD_APP_MANIFEST_FILE) as f:
             manifest = yaml.safe_load(f)
         manifest |= {
             'build_time': datetime.now(timezone.utc),
             'file_name': app_file.name,
-            'file_sha1': file_sha1,
+            'file_sha1': _calculate_sha1(app_file),
         }
 
-        with open(BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name, 'w') as f:
+        manifest_file = BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name
+        with open(manifest_file, 'w') as f:
             f.write('# App manifest\n\n')
             yaml.safe_dump(manifest, f)
+
+    # Zip file
+    if no_zip:
+        print('ZIP file not created.')
+    else:
+        import zipfile
+
+        zip_file = BUILD_DIST_DIR / f'{app_file.stem}.zip'
+        with zipfile.ZipFile(zip_file, 'w') as f:
+            f.write(app_file, arcname=app_file.name)
+            if manifest_file:
+                f.write(manifest_file, arcname=manifest_file.name)
+
+    print('Done')
 
 
 @task
@@ -184,6 +199,8 @@ def build_run(c):
         c.run(str(exes[0]))
     elif platform.system() == 'Darwin':
         raise Exit('Running on MacOS still needs to be implemented.')
+    elif platform.system() == 'Linux':
+        raise Exit('Running on Linux still needs to be implemented.')
     else:
         raise Exit(f'Running on {platform.system()} is not supported.')
 

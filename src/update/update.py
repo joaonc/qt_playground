@@ -79,7 +79,7 @@ def perform_update(update_file=None):
     else:
         logging.debug('Not backing up file due to `QT_PLAYGROUND_IGNORE_UPDATE` being set.')
 
-# Substitute with new file
+    # Substitute with new file
     try:
         logging.debug(f'Copying new version from {update_file}')
         if not config.IGNORE_UPDATE:
