@@ -84,6 +84,11 @@ def _get_requirements_files(requirements: str | None, extension: str) -> list[st
     return filenames
 
 
+def _get_git_commit() -> str:
+    import subprocess
+    return subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip().lower()
+
+
 def _calculate_sha1(file_path):
     import hashlib
 
@@ -159,6 +164,7 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False, no_zip: bool
             manifest = yaml.safe_load(f)
         manifest |= {
             'build_time': datetime.now(timezone.utc),
+            'git_commit': _get_git_commit(),
             'file_name': app_file.name,
             'file_sha1': _calculate_sha1(app_file),
         }
