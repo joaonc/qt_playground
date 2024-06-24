@@ -10,6 +10,11 @@ These test the UI by simulating user interaction.
 fixture, which is not required to be used, but keeps track of the widget and will ensure that it
 gets closed by the end of the test, so it is highly recommended.
 
+!!! Note
+
+    The tests in this project are not meant to be comprehensive, rather to be used as examples
+    on how to do tests for Qt apps using pytest.
+
 ## Running the unit tests
 If using an IDE such as PyCharm or VS Code, the tests can be executed from within the IDE.
 

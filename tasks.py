@@ -86,25 +86,36 @@ def _get_requirements_files(requirements: str | None, extension: str) -> list[st
 
 def _get_build_files() -> tuple[Path, Path, Path]:
     # Assumes the distribution directory is empty prior to creating the app
-    files = [f for f in BUILD_DIST_DIR.glob('*') if f.is_file()]
+    manifest_file = BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name
+    files = [
+        f
+        for f in BUILD_DIST_DIR.glob('*')
+        if f.is_file() and f != manifest_file and f.suffix.lower() != '.zip'
+    ]
     if not files:
-        Exit(f'App file not found in {BUILD_DIST_DIR}')
+        raise Exit(f'App file not found in {BUILD_DIST_DIR}')
     if len(files) > 1:
-        Exit(
-            f'{len(files)} files found in the distribution folder {BUILD_DIST_DIR}. '
-            f'One file expected.'
+        raise Exit(
+            f'One file expected in the distribution folder {BUILD_DIST_DIR}.\n'
+            f'{len(files)} files found:\n' + '\n'.join(str(file) for file in files)
         )
     app_file = files[0]
-    manifest_file = BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name
     zip_file = BUILD_DIST_DIR / f'{app_file.stem}.zip'
 
     return app_file, manifest_file, zip_file
 
 
+def _check_git_tag_exists(tag) -> bool:
+    import subprocess
+
+    tags = subprocess.check_output(['git', 'tag', '--list'], text=True).split('\n')
+    return tag in tags
+
+
 def _get_git_commit() -> str:
     import subprocess
 
-    return subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip().lower()
+    return subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip().lower()
 
 
 def _calculate_sha1(file_path):
@@ -206,9 +217,11 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False, no_zip: bool
 def build_release(c, prerelease: bool = False, draft: bool = False, notes: str = '', notes_file=''):
     """
     Create a GitHub release with the current code.
+
+    Need to be authenticated with `gh auth login` or by setting the `GH_TOKEN` environment variable
+    with a GitHub API authentication token.
     """
     import shutil
-    import subprocess
     import zipfile
 
     import yaml
@@ -227,7 +240,7 @@ def build_release(c, prerelease: bool = False, draft: bool = False, notes: str =
     if not zip_file.exists():
         raise Exit(
             f'Zip not found: {zip_file}\n'
-            'Rebuild the app with `inv build.dist` without the `--no-zip` option.'
+            'Rebuild the app with `inv build.dist` and without the `--no-zip` option.'
         )
 
     # Get build info from manifest inside Zip
@@ -235,29 +248,31 @@ def build_release(c, prerelease: bool = False, draft: bool = False, notes: str =
         manifest_str = f.read(manifest_file.name).decode()
     manifest = yaml.safe_load(manifest_str)
 
-    # Create release
+    # Prepare release
     app_version = manifest['version']
     release_tag = app_version
     release_title = f'v{app_version}' + (' (beta)' if prerelease else '')
 
-    command = ['gh', 'release', 'create', release_tag, '--title', release_title, '--generate-notes']
-    if notes:
-        command += ['--notes', notes]
-    if notes_file:
-        command += ['--notes-file', notes_file]
-    if prerelease:
-        command += ['--prerelease']
-    if draft:
-        command += ['--draft']
-    command += [zip_file]
-
-    result = subprocess.run(command)
-
-    if result.returncode != 0:
+    if _check_git_tag_exists(release_tag):
         raise Exit(
-            f'The command to create a release failed with exit code {result.returncode}.\n'
-            f'{" ".join(command)}\n{result.stderr}'
+            f'Tag/Release `{release_tag}` already exists.\n'
+            f'Update version in `{BUILD_APP_MANIFEST_FILE.relative_to(PROJECT_ROOT)}`.'
         )
+
+    # Create release
+    command = (
+        f'gh release create "{release_tag}" "{zip_file}" --title "{release_title}" --generate-notes'
+    )
+    if notes:
+        command += f' --notes "{notes}"'
+    if notes_file:
+        command += f'--notes-file "{notes_file}"'
+    if prerelease:
+        command += '--prerelease'
+    if draft:
+        command += '--draft'
+
+    c.run(command)
 
 
 @task

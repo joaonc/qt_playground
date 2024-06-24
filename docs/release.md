@@ -25,6 +25,14 @@ Press Enter to open github.com in your browser...
 
 ## Creating a release
 
+1. Update (increase) the app version in `assets/app.yaml`.
+2. Create and merge a new PR called "Preparing for v1.2.3" release.  
+   This merges the new version, which will be used to create the release and set it to the right
+   commit hash.
+3. Run `inv build.release`
+   Use the `--notes` or `--notes-file` to add more details to the release.  
+   See sections below for beta and draft releases.
+
 ### Beta
 
 ### Draft
