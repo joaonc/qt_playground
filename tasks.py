@@ -200,15 +200,15 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False, no_zip: bool
         'prerelease': 'Mark the release as a prerelease (beta).',
         'draft': 'Save the release as a draft instead of publishing it.',
         'notes': 'Release notes.',
-        'notes_file': 'Read release notes from file. Ignores the `-notes` parameter.'
+        'notes_file': 'Read release notes from file. Ignores the `-notes` parameter.',
     },
-
 )
-def build_release(c, prerelease: bool = False, draft: bool=False, notes: str='', notes_file=''):
+def build_release(c, prerelease: bool = False, draft: bool = False, notes: str = '', notes_file=''):
     """
     Create a GitHub release with the current code.
     """
     import shutil
+    import subprocess
     import zipfile
 
     import yaml
@@ -218,6 +218,9 @@ def build_release(c, prerelease: bool = False, draft: bool=False, notes: str='',
             '`gh` command not found. '
             'Please install GitHub CLI (https://cli.github.com/) to proceed.'
         )
+
+    if notes and notes_file:
+        raise Exit('Both `--notes` and `--notes-file` are specified. Only one can be specified.')
 
     _, manifest_file, zip_file = _get_build_files()
 
@@ -237,7 +240,25 @@ def build_release(c, prerelease: bool = False, draft: bool=False, notes: str='',
     release_tag = app_version
     release_title = f'v{app_version}' + (' (beta)' if prerelease else '')
 
-    # Upload Zip file
+    command = ['gh', 'release', 'create', release_tag, '--title', release_title, '--generate-notes']
+    if notes:
+        command += ['--notes', notes]
+    if notes_file:
+        command += ['--notes-file', notes_file]
+    if prerelease:
+        command += ['--prerelease']
+    if draft:
+        command += ['--draft']
+    command += [zip_file]
+
+    result = subprocess.run(command)
+
+    if result.returncode != 0:
+        raise Exit(
+            f'The command to create a release failed with exit code {result.returncode}.\n'
+            f'{" ".join(command)}\n{result.stderr}'
+        )
+
 
 @task
 def build_run(c):
