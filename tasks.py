@@ -84,8 +84,26 @@ def _get_requirements_files(requirements: str | None, extension: str) -> list[st
     return filenames
 
 
+def _get_build_files() -> tuple[Path, Path, Path]:
+    # Assumes the distribution directory is empty prior to creating the app
+    files = [f for f in BUILD_DIST_DIR.glob('*') if f.is_file()]
+    if not files:
+        Exit(f'App file not found in {BUILD_DIST_DIR}')
+    if len(files) > 1:
+        Exit(
+            f'{len(files)} files found in the distribution folder {BUILD_DIST_DIR}. '
+            f'One file expected.'
+        )
+    app_file = files[0]
+    manifest_file = BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name
+    zip_file = BUILD_DIST_DIR / f'{app_file.stem}.zip'
+
+    return app_file, manifest_file, zip_file
+
+
 def _get_git_commit() -> str:
     import subprocess
+
     return subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip().lower()
 
 
@@ -127,6 +145,7 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False, no_zip: bool
     """
     Build the distributable/executable file(s).
     """
+    # Build executable
     if no_spec:
         c.run(
             f'pyinstaller '
@@ -139,18 +158,7 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False, no_zip: bool
             f'--distpath "{BUILD_DIST_DIR}" --workpath "{BUILD_WORK_DIR}"'
         )
 
-    # Verify app file was built
-    # Assumes the distribution directory is empty prior to creating the app
-    files = [f for f in BUILD_DIST_DIR.glob('*') if f.is_file()]
-    if not files:
-        Exit(f'App file not found in {BUILD_DIST_DIR}')
-    if len(files) > 1:
-        Exit(
-            f'{len(files)} files found in the distribution folder {BUILD_DIST_DIR}. '
-            f'One file expected.'
-        )
-    app_file = files[0]
-    manifest_file = None
+    app_file, manifest_file, zip_file = _get_build_files()
 
     # App manifest file
     if no_manifest:
@@ -169,7 +177,6 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False, no_zip: bool
             'file_sha1': _calculate_sha1(app_file),
         }
 
-        manifest_file = BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name
         with open(manifest_file, 'w') as f:
             f.write('# App manifest\n\n')
             yaml.safe_dump(manifest, f)
@@ -180,14 +187,57 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False, no_zip: bool
     else:
         import zipfile
 
-        zip_file = BUILD_DIST_DIR / f'{app_file.stem}.zip'
         with zipfile.ZipFile(zip_file, 'w') as f:
             f.write(app_file, arcname=app_file.name)
-            if manifest_file:
+            if manifest_file.exists():
                 f.write(manifest_file, arcname=manifest_file.name)
 
     print('Done')
 
+
+@task(
+    help={
+        'prerelease': 'Mark the release as a prerelease (beta).',
+        'draft': 'Save the release as a draft instead of publishing it.',
+        'notes': 'Release notes.',
+        'notes_file': 'Read release notes from file. Ignores the `-notes` parameter.'
+    },
+
+)
+def build_release(c, prerelease: bool = False, draft: bool=False, notes: str='', notes_file=''):
+    """
+    Create a GitHub release with the current code.
+    """
+    import shutil
+    import zipfile
+
+    import yaml
+
+    if shutil.which('gh') is None:
+        raise Exit(
+            '`gh` command not found. '
+            'Please install GitHub CLI (https://cli.github.com/) to proceed.'
+        )
+
+    _, manifest_file, zip_file = _get_build_files()
+
+    if not zip_file.exists():
+        raise Exit(
+            f'Zip not found: {zip_file}\n'
+            'Rebuild the app with `inv build.dist` without the `--no-zip` option.'
+        )
+
+    # Get build info from manifest inside Zip
+    with zipfile.ZipFile(zip_file) as f:
+        manifest_str = f.read(manifest_file.name).decode()
+    manifest = yaml.safe_load(manifest_str)
+
+    # Create release
+    app_version = manifest['version']
+    release_tag = app_version
+    release_title = f'v{app_version}' + (' (beta)' if prerelease else '')
+
+    # Upload Zip file
 
 @task
 def build_run(c):
@@ -418,6 +468,7 @@ test_collection.add_task(test_unit, 'unit')
 build_collection = Collection('build')
 build_collection.add_task(build_clean, 'clean')
 build_collection.add_task(build_dist, 'dist')
+build_collection.add_task(build_release, 'release')
 build_collection.add_task(build_run, 'run')
 
 lint_collection = Collection('lint')
