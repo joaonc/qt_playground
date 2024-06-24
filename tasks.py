@@ -84,6 +84,40 @@ def _get_requirements_files(requirements: str | None, extension: str) -> list[st
     return filenames
 
 
+def _get_build_files() -> tuple[Path, Path, Path]:
+    # Assumes the distribution directory is empty prior to creating the app
+    manifest_file = BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name
+    files = [
+        f
+        for f in BUILD_DIST_DIR.glob('*')
+        if f.is_file() and f != manifest_file and f.suffix.lower() != '.zip'
+    ]
+    if not files:
+        raise Exit(f'App file not found in {BUILD_DIST_DIR}')
+    if len(files) > 1:
+        raise Exit(
+            f'One file expected in the distribution folder {BUILD_DIST_DIR}.\n'
+            f'{len(files)} files found:\n' + '\n'.join(str(file) for file in files)
+        )
+    app_file = files[0]
+    zip_file = BUILD_DIST_DIR / f'{app_file.stem}.zip'
+
+    return app_file, manifest_file, zip_file
+
+
+def _check_git_tag_exists(tag) -> bool:
+    import subprocess
+
+    tags = subprocess.check_output(['git', 'tag', '--list'], text=True).split('\n')
+    return tag in tags
+
+
+def _get_git_commit() -> str:
+    import subprocess
+
+    return subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip().lower()
+
+
 def _calculate_sha1(file_path):
     import hashlib
 
@@ -114,13 +148,15 @@ def build_clean(c):
     help={
         'no_spec': f'Do not use the spec file `{BUILD_SPEC_FILE.relative_to(PROJECT_ROOT)}` and '
         f'create one in the `{BUILD_WORK_DIR.relative_to(PROJECT_ROOT)}` directory with defaults.',
-        'no_manifest': 'Do not create a manifest file. Creating it requires the `pyyaml` package.',
+        'no_manifest': 'Do not create a manifest file.',
+        'no_zip': 'Do not create a ZIP file, which can be used to upload to a GitHub release.',
     },
 )
-def build_dist(c, no_spec: bool = False, no_manifest: bool = False):
+def build_dist(c, no_spec: bool = False, no_manifest: bool = False, no_zip: bool = False):
     """
     Build the distributable/executable file(s).
     """
+    # Build executable
     if no_spec:
         c.run(
             f'pyinstaller '
@@ -133,39 +169,110 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False):
             f'--distpath "{BUILD_DIST_DIR}" --workpath "{BUILD_WORK_DIR}"'
         )
 
-    # Verify app file was built
-    # Assumes the distribution directory is empty prior to creating the app
-    files = [f for f in BUILD_DIST_DIR.glob('*') if f.is_file()]
-    if not files:
-        Exit(f'App file not found in {BUILD_DIST_DIR}')
-    if len(files) > 1:
-        Exit(
-            f'{len(files)} files found in the distribution folder {BUILD_DIST_DIR}. '
-            f'One file expected.'
-        )
+    app_file, manifest_file, zip_file = _get_build_files()
 
     # App manifest file
     if no_manifest:
-        c.echo('App manifest file not created.')
+        print('App manifest file not created.')
     else:
         from datetime import datetime, timezone
 
         import yaml
 
-        app_file = files[0]
-        file_sha1 = _calculate_sha1(app_file)
-
         with open(BUILD_APP_MANIFEST_FILE) as f:
             manifest = yaml.safe_load(f)
         manifest |= {
             'build_time': datetime.now(timezone.utc),
+            'git_commit': _get_git_commit(),
             'file_name': app_file.name,
-            'file_sha1': file_sha1,
+            'file_sha1': _calculate_sha1(app_file),
         }
 
-        with open(BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name, 'w') as f:
+        with open(manifest_file, 'w') as f:
             f.write('# App manifest\n\n')
             yaml.safe_dump(manifest, f)
+
+    # Zip file
+    if no_zip:
+        print('ZIP file not created.')
+    else:
+        import zipfile
+
+        with zipfile.ZipFile(zip_file, 'w') as f:
+            f.write(app_file, arcname=app_file.name)
+            if manifest_file.exists():
+                f.write(manifest_file, arcname=manifest_file.name)
+
+    print('Done')
+
+
+@task(
+    help={
+        'prerelease': 'Mark the release as a prerelease (beta).',
+        'draft': 'Save the release as a draft instead of publishing it.',
+        'notes': 'Release notes.',
+        'notes_file': 'Read release notes from file. Ignores the `-notes` parameter.',
+    },
+)
+def build_release(c, prerelease: bool = False, draft: bool = False, notes: str = '', notes_file=''):
+    """
+    Create a GitHub release with the current code.
+
+    Need to be authenticated with `gh auth login` or by setting the `GH_TOKEN` environment variable
+    with a GitHub API authentication token.
+    """
+    import shutil
+    import zipfile
+
+    import yaml
+
+    if shutil.which('gh') is None:
+        raise Exit(
+            '`gh` command not found. '
+            'Please install GitHub CLI (https://cli.github.com/) to proceed.'
+        )
+
+    if notes and notes_file:
+        raise Exit('Both `--notes` and `--notes-file` are specified. Only one can be specified.')
+
+    _, manifest_file, zip_file = _get_build_files()
+
+    if not zip_file.exists():
+        raise Exit(
+            f'Zip not found: {zip_file}\n'
+            'Rebuild the app with `inv build.dist` and without the `--no-zip` option.'
+        )
+
+    # Get build info from manifest inside Zip
+    with zipfile.ZipFile(zip_file) as f:
+        manifest_str = f.read(manifest_file.name).decode()
+    manifest = yaml.safe_load(manifest_str)
+
+    # Prepare release
+    app_version = manifest['version']
+    release_tag = app_version
+    release_title = f'v{app_version}' + (' (beta)' if prerelease else '')
+
+    if _check_git_tag_exists(release_tag):
+        raise Exit(
+            f'Tag/Release `{release_tag}` already exists.\n'
+            f'Update version in `{BUILD_APP_MANIFEST_FILE.relative_to(PROJECT_ROOT)}`.'
+        )
+
+    # Create release
+    command = (
+        f'gh release create "{release_tag}" "{zip_file}" --title "{release_title}" --generate-notes'
+    )
+    if notes:
+        command += f' --notes "{notes}"'
+    if notes_file:
+        command += f'--notes-file "{notes_file}"'
+    if prerelease:
+        command += '--prerelease'
+    if draft:
+        command += '--draft'
+
+    c.run(command)
 
 
 @task
@@ -184,6 +291,8 @@ def build_run(c):
         c.run(str(exes[0]))
     elif platform.system() == 'Darwin':
         raise Exit('Running on MacOS still needs to be implemented.')
+    elif platform.system() == 'Linux':
+        raise Exit('Running on Linux still needs to be implemented.')
     else:
         raise Exit(f'Running on {platform.system()} is not supported.')
 
@@ -395,6 +504,7 @@ test_collection.add_task(test_unit, 'unit')
 build_collection = Collection('build')
 build_collection.add_task(build_clean, 'clean')
 build_collection.add_task(build_dist, 'dist')
+build_collection.add_task(build_release, 'release')
 build_collection.add_task(build_run, 'run')
 
 lint_collection = Collection('lint')
