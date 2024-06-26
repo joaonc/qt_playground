@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'playground_main_window.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.1
+## Created by: Qt User Interface Compiler version 6.7.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -28,18 +28,20 @@ class Ui_PlaygroundMainWindow(object):
             PlaygroundMainWindow.setObjectName(u"PlaygroundMainWindow")
         PlaygroundMainWindow.resize(267, 348)
         icon = QIcon()
-        icon.addFile(u":/images/playground_icon_187860_256.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u":/images/playground_icon_187860_256.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         PlaygroundMainWindow.setWindowIcon(icon)
         self.action_about = QAction(PlaygroundMainWindow)
         self.action_about.setObjectName(u"action_about")
         icon1 = QIcon()
-        icon1.addFile(u":/images/about_icon_512.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u":/images/about_icon_512.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.action_about.setIcon(icon1)
         self.action_quit = QAction(PlaygroundMainWindow)
         self.action_quit.setObjectName(u"action_quit")
         icon2 = QIcon()
-        icon2.addFile(u":/images/cancel-close-cross-delete_icon_114048_512.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon2.addFile(u":/images/cancel-close-cross-delete_icon_114048_512.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.action_quit.setIcon(icon2)
+        self.action_check_for_updates = QAction(PlaygroundMainWindow)
+        self.action_check_for_updates.setObjectName(u"action_check_for_updates")
         self.central_widget = QWidget(PlaygroundMainWindow)
         self.central_widget.setObjectName(u"central_widget")
         self.verticalLayout = QVBoxLayout(self.central_widget)
@@ -99,6 +101,7 @@ class Ui_PlaygroundMainWindow(object):
 
         self.menu_bar.addAction(self.menu_file.menuAction())
         self.menu_bar.addAction(self.menu_help.menuAction())
+        self.menu_help.addAction(self.action_check_for_updates)
         self.menu_help.addAction(self.action_about)
         self.menu_file.addAction(self.action_quit)
         self.tool_bar.addAction(self.action_quit)
@@ -115,6 +118,7 @@ class Ui_PlaygroundMainWindow(object):
 #if QT_CONFIG(shortcut)
         self.action_quit.setShortcut(QCoreApplication.translate("PlaygroundMainWindow", u"Ctrl+Q", None))
 #endif // QT_CONFIG(shortcut)
+        self.action_check_for_updates.setText(QCoreApplication.translate("PlaygroundMainWindow", u"&Check for updates", None))
         self.message_button.setText(QCoreApplication.translate("PlaygroundMainWindow", u"Message", None))
         self.show_messages_button.setText(QCoreApplication.translate("PlaygroundMainWindow", u"Show Messages", None))
         self.menu_help.setTitle(QCoreApplication.translate("PlaygroundMainWindow", u"&Help", None))

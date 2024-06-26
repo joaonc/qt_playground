@@ -77,6 +77,7 @@
     <property name="title">
      <string>&amp;Help</string>
     </property>
+    <addaction name="action_check_for_updates"/>
     <addaction name="action_about"/>
    </widget>
    <widget class="QMenu" name="menu_file">
@@ -120,6 +121,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="action_check_for_updates">
+   <property name="text">
+    <string>&amp;Check for updates</string>
    </property>
   </action>
  </widget>
