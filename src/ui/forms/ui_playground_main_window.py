@@ -28,7 +28,7 @@ class Ui_PlaygroundMainWindow(object):
             PlaygroundMainWindow.setObjectName(u"PlaygroundMainWindow")
         PlaygroundMainWindow.resize(267, 348)
         icon = QIcon()
-        icon.addFile(u":/images/playground_icon_187860_256.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon.addFile(u":/images/playground_icon.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         PlaygroundMainWindow.setWindowIcon(icon)
         self.action_about = QAction(PlaygroundMainWindow)
         self.action_about.setObjectName(u"action_about")

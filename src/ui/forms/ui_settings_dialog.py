@@ -17,12 +17,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractButton, QApplication, QComboBox, QDialog,
     QDialogButtonBox, QLabel, QSizePolicy, QWidget)
+from . import resources_rc
 
 class Ui_SettingsDialog(object):
     def setupUi(self, SettingsDialog):
         if not SettingsDialog.objectName():
             SettingsDialog.setObjectName(u"SettingsDialog")
         SettingsDialog.resize(400, 300)
+        icon = QIcon()
+        icon.addFile(u":/images/playground_icon.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        SettingsDialog.setWindowIcon(icon)
         self.button_box = QDialogButtonBox(SettingsDialog)
         self.button_box.setObjectName(u"button_box")
         self.button_box.setGeometry(QRect(30, 240, 341, 32))
@@ -43,7 +47,7 @@ class Ui_SettingsDialog(object):
     # setupUi
 
     def retranslateUi(self, SettingsDialog):
-        SettingsDialog.setWindowTitle(QCoreApplication.translate("SettingsDialog", u"Dialog", None))
+        SettingsDialog.setWindowTitle(QCoreApplication.translate("SettingsDialog", u"Settings", None))
         self.theme_label.setText(QCoreApplication.translate("SettingsDialog", u"Theme", None))
     # retranslateUi
 
