@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QMainWindow, QMessageBox
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QApplication
 
 import src.config as config
 from src.ui.forms.ui_playground_main_window import Ui_PlaygroundMainWindow
@@ -17,6 +17,7 @@ class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
         self.action_quit.triggered.connect(self.close)
         self.action_check_for_updates.triggered.connect(self.check_for_updates)
         self.action_about.triggered.connect(self.about)
+        self.action_about_qt.triggered.connect(self.about_qt)
 
     def send_message(self):
         input_text = self.input_line_edit.text()
@@ -46,3 +47,7 @@ class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
             'About Qt Playground',
             f'Codebase to learn Qt by example.\nv {config.version}',
         )
+
+    # noinspection PyMethodMayBeStatic
+    def about_qt(self):
+        QApplication.aboutQt()
