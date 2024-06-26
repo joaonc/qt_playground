@@ -110,7 +110,7 @@
   <action name="action_about">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/images/about_icon_512.png</normaloff>:/images/about_icon_512.png</iconset>
+     <normaloff>:/images/about_icon.png</normaloff>:/images/about_icon.png</iconset>
    </property>
    <property name="text">
     <string>About</string>
@@ -119,7 +119,7 @@
   <action name="action_quit">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/images/cancel-close-cross-delete_icon_114048_512.png</normaloff>:/images/cancel-close-cross-delete_icon_114048_512.png</iconset>
+     <normaloff>:/images/cancel_close_delete_cross_icon.png</normaloff>:/images/cancel_close_delete_cross_icon.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Quit</string>
@@ -136,7 +136,7 @@
   <action name="action_about_qt">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/images/about_qt_icon_512.png</normaloff>:/images/about_qt_icon_512.png</iconset>
+     <normaloff>:/images/about_qt_icon.png</normaloff>:/images/about_qt_icon.png</iconset>
    </property>
    <property name="text">
     <string>About &amp;Qt</string>
