@@ -4,6 +4,7 @@ import src.config as config
 from src.ui.forms.ui_playground_main_window import Ui_PlaygroundMainWindow
 from src.ui.show_message_dialog import ShowMessageDialog
 import src.update.update as update
+from ui.settings_dialog import SettingsDialog
 
 
 class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
@@ -14,6 +15,7 @@ class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
         # UI bindings
         self.message_button.clicked.connect(self.send_message)
         self.show_messages_button.clicked.connect(self.show_message)
+        self.action_settings.triggered.connect(self.settings)
         self.action_quit.triggered.connect(self.close)
         self.action_check_for_updates.triggered.connect(self.check_for_updates)
         self.action_about.triggered.connect(self.about)
@@ -29,6 +31,10 @@ class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
         dialog.message_plain_text_edit.setPlainText(self.output_plain_text_edit.toPlainText())
         result = dialog.exec()
         print(result)
+
+    def settings(self):
+        dialog = SettingsDialog()
+        result = dialog.exec()
 
     def check_for_updates(self):
         need_update, version_update = update.check_update()

@@ -7,3 +7,5 @@ class SettingsDialog(QDialog, Ui_SettingsDialog):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+
+        self.theme_combo_box.addItems(['Normal', 'Fusion'])
