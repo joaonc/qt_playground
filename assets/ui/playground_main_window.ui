@@ -77,7 +77,9 @@
     <property name="title">
      <string>&amp;Help</string>
     </property>
+    <addaction name="action_check_for_updates"/>
     <addaction name="action_about"/>
+    <addaction name="action_about_qt"/>
    </widget>
    <widget class="QMenu" name="menu_file">
     <property name="title">
@@ -120,6 +122,20 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="action_check_for_updates">
+   <property name="text">
+    <string>&amp;Check for updates</string>
+   </property>
+  </action>
+  <action name="action_about_qt">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/images/about_qt_icon_512.png</normaloff>:/images/about_qt_icon_512.png</iconset>
+   </property>
+   <property name="text">
+    <string>About &amp;Qt</string>
    </property>
   </action>
  </widget>

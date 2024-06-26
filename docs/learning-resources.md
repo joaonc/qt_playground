@@ -1,7 +1,10 @@
-Resources (courses, blogs, etc.) for further information on Qt.
+Resources (courses, blogs, etc.) for further information on the different technologies used in
+this project.
 
 ## Qt
 
+* [PySide6 tutorial](https://www.pythonguis.com/pyside6-tutorial/#pyside6-getting-started)
+* [First steps with Qt Designer](https://www.pythonguis.com/tutorials/pyside6-first-steps-qt-designer/)
 * [Qt Designer and Python: Build Your GUI Applications Faster](https://realpython.com/qt-designer-python/)  
   Free course from _Real Python_. Covers PySide 5 (6 is used in this project), but the concepts are
   the same.

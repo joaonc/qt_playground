@@ -41,6 +41,22 @@ inv ui.py <file>  # `.ui` extension not required
 inv ui.py <file1>,<file2>
 ```
 
+### IDE
+In most cases, the code editor used will be [VS Code](https://code.visualstudio.com/) or
+[PyCharm](https://www.jetbrains.com/pycharm/).
+
+In this case, PyCharm was used and some of its features are seen in the code in the form of
+comments that add functionality:
+
+* `# noinspection`  
+  PyCharm's internal linter and rule inspector checks for things that the linters used (`flake8`,
+  `mypy`, etc.) may not check and a warning appears in the IDE. That warning can be disabled with
+  the `# noinspection <inspection_name>` directive.
+* `# region`  
+  The `# region <region_name>` / `# endregion` directives create a foldable block of code that makes
+  it easier to identify what that block is doing and hiding it when reading the code at a higher
+  level.
+
 ## Qt Installation
 https://doc.qt.io/qt-6/get-and-install-qt.html
 
@@ -53,7 +69,3 @@ necessary (still learning how to install a Qt app).
 See [this video](https://www.youtube.com/watch?v=1pKMcwJZay4) for more details.
 
 Takes a while to download and install.
-
-## Resources
-* [PySide6 tutorial](https://www.pythonguis.com/pyside6-tutorial/#pyside6-getting-started)
-* [First steps with Qt Designer](https://www.pythonguis.com/tutorials/pyside6-first-steps-qt-designer/)
