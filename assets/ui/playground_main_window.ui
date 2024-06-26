@@ -85,6 +85,8 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="action_settings"/>
+    <addaction name="separator"/>
     <addaction name="action_quit"/>
    </widget>
    <addaction name="menu_file"/>
@@ -101,6 +103,8 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="action_settings"/>
+   <addaction name="separator"/>
    <addaction name="action_quit"/>
   </widget>
   <action name="action_about">
@@ -136,6 +140,15 @@
    </property>
    <property name="text">
     <string>About &amp;Qt</string>
+   </property>
+  </action>
+  <action name="action_settings">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/images/settings_icon.png</normaloff>:/images/settings_icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Settings</string>
    </property>
   </action>
  </widget>

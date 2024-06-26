@@ -1,5 +1,6 @@
 <RCC>
   <qresource>
+    <file>images/settings_icon.png</file>
     <file>images/about_qt_icon_512.png</file>
     <file>images/cancel-close-cross-delete_icon_114048_512.png</file>
     <file>images/about_icon_512.png</file>
