@@ -2,13 +2,13 @@ import logging
 from typing import cast
 
 from PySide6.QtCore import QCoreApplication, QSettings
-from PySide6.QtWidgets import QMainWindow, QMessageBox, QApplication, QDialog, QStyleFactory
+from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QMessageBox, QStyleFactory
 
 import src.config as config
+import src.update.update as update
 from src.ui.forms.ui_playground_main_window import Ui_PlaygroundMainWindow
 from src.ui.show_message_dialog import ShowMessageDialog
-import src.update.update as update
-from ui.settings_dialog import SettingsDialog, Settings
+from ui.settings_dialog import Settings, SettingsDialog
 
 
 class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
@@ -58,7 +58,6 @@ class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
         style = settings.value(Settings.Style)
         self.app.setStyle(QStyleFactory.create(style))  # type: ignore
         logging.debug(f'Style `{style}` applied.')
-
 
     def check_for_updates(self):
         need_update, version_update = update.check_update()

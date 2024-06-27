@@ -26,7 +26,7 @@ def main():
         try:
             need_update, version_update = update.check_update(config.update_manifest)
             if version_update is None:
-                logging.warning(f'Manifest file to update not specified.')
+                logging.warning('Manifest file to update not specified.')
         except FileNotFoundError:
             logging.warning(
                 f'Manifest for file to update not found: {config.update_manifest}\n'
@@ -111,10 +111,19 @@ def set_config_values():
     config_dict = {
         key: getattr(config, key, '__UNDEFINED__')
         for key in sorted(dir(config))
-        if not key.startswith('_')
-        and type(getattr(config, key)) not in [types.FunctionType, types.ModuleType, type]
+        if (
+            not key.startswith('_')
+            and (  # noqa: W503
+                type(getattr(config, key))
+                not in [
+                    types.FunctionType,
+                    types.ModuleType,
+                    type,
+                ]
+            )
+        )
     }
-    logging.debug(f'Config:\n' + '\n'.join(f'  {key}: {val}' for key, val in config_dict.items()))
+    logging.debug('Config:\n' + '\n'.join(f'  {key}: {val}' for key, val in config_dict.items()))
 
 
 if __name__ == '__main__':
