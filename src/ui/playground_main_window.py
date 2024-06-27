@@ -1,16 +1,21 @@
-from PySide6.QtWidgets import QMainWindow, QMessageBox, QApplication
+import logging
+from typing import cast
+
+from PySide6.QtCore import QCoreApplication, QSettings
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QApplication, QDialog, QStyleFactory
 
 import src.config as config
 from src.ui.forms.ui_playground_main_window import Ui_PlaygroundMainWindow
 from src.ui.show_message_dialog import ShowMessageDialog
 import src.update.update as update
-from ui.settings_dialog import SettingsDialog
+from ui.settings_dialog import SettingsDialog, Settings
 
 
 class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.app = cast(QApplication, QApplication.instance())
 
         # UI bindings
         self.message_button.clicked.connect(self.send_message)
@@ -20,6 +25,14 @@ class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
         self.action_check_for_updates.triggered.connect(self.check_for_updates)
         self.action_about.triggered.connect(self.about)
         self.action_about_qt.triggered.connect(self.about_qt)
+
+        # Set `QSettings` defaults so `QSettings()` can be used anywhere.
+        # As opposed to setting the values each time `QSettings` is instantiated
+        QCoreApplication.setOrganizationName(config.ORGANIZATION_NAME)
+        QCoreApplication.setOrganizationDomain(config.ORGANIZATION_DOMAIN)
+        QCoreApplication.setApplicationName(config.APPLICATION_NAME)
+
+        self.set_style()
 
     def send_message(self):
         input_text = self.input_line_edit.text()
@@ -32,9 +45,20 @@ class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
         result = dialog.exec()
         print(result)
 
+    # noinspection PyMethodMayBeStatic
     def settings(self):
         dialog = SettingsDialog()
         result = dialog.exec()
+
+        if result == QDialog.DialogCode.Accepted:
+            self.set_style()
+
+    def set_style(self):
+        settings = QSettings()
+        style = settings.value(Settings.Style)
+        self.app.setStyle(QStyleFactory.create(style))  # type: ignore
+        logging.debug(f'Style `{style}` applied.')
+
 
     def check_for_updates(self):
         need_update, version_update = update.check_update()
