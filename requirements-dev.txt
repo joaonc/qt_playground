@@ -127,6 +127,8 @@ shiboken6==6.7.2
     #   pyside6-essentials
 stevedore==5.2.0
     # via bandit
+types-pyyaml==6.0.12.20240311
+    # via -r requirements-dev.in
 typing-extensions==4.12.2
     # via mypy
 virtualenv==20.26.3

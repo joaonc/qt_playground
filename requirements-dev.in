@@ -11,6 +11,7 @@ black               # Linter
 flake8              # Linter
 isort               # Linter
 mypy                # Code inspector
+types-pyyaml        # Mypy type hints
 
 # Test
 pytest              # Test framework
