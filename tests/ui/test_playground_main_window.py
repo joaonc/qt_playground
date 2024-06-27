@@ -1,4 +1,4 @@
-from ui.playground_main_window import PlaygroundMainWindow
+from src.ui.playground_main_window import PlaygroundMainWindow
 
 
 def test_enter_text(qtbot):

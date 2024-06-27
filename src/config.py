@@ -14,7 +14,7 @@ from semantic_version import Version
 
 def read_manifest_file(manifest) -> dict:
     with open(manifest) as f:
-        return yaml.safe_load(f)
+        return yaml.safe_load(f)  # type: ignore
 
 
 def is_truthy(value) -> bool:
@@ -52,7 +52,7 @@ Set the environment variable ``QT_PLAYGROUND_IGNORE_UPDATE`` to ``True`` or ``1`
 """
 
 if IS_BUNDLED_APP:
-    PROJECT_ROOT = Path(sys._MEIPASS)  # noqa
+    PROJECT_ROOT = Path(sys._MEIPASS)  # type: ignore
 else:
     PROJECT_ROOT = Path(__file__).parents[1]
 

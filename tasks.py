@@ -410,9 +410,9 @@ def lint_all(c):
 @task
 def test_unit(c):
     """
-    Runs unit tests that check functionality in this project's helper libraries.
+    Run unit tests.
     """
-    c.run('python -m pytest tests/tests/unit')
+    c.run('python -m pytest')
 
 
 @task(help=REQUIREMENTS_TASK_HELP)

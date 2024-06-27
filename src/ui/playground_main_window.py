@@ -7,8 +7,8 @@ from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QMessageBox, Q
 import src.config as config
 import src.update.update as update
 from src.ui.forms.ui_playground_main_window import Ui_PlaygroundMainWindow
+from src.ui.settings_dialog import Settings, SettingsDialog
 from src.ui.show_message_dialog import ShowMessageDialog
-from ui.settings_dialog import Settings, SettingsDialog
 
 
 class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):

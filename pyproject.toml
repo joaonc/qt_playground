@@ -39,7 +39,7 @@ disable_error_code = 'annotation-unchecked'
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
 module = [
-    'invoke', 'factory', 'PySide6'
+    'invoke', 'factory', 'PySide6', 'semantic_version'
 ]
 
 [tool.pytest.ini_options]

@@ -3,7 +3,7 @@ from enum import StrEnum
 from PySide6.QtCore import QSettings
 from PySide6.QtWidgets import QDialog, QStyleFactory
 
-from ui.forms.ui_settings_dialog import Ui_SettingsDialog
+from src.ui.forms.ui_settings_dialog import Ui_SettingsDialog
 
 
 class Settings(StrEnum):
