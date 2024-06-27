@@ -37,7 +37,7 @@ class Ui_SettingsDialog(object):
         self.theme_label.setGeometry(QRect(20, 20, 49, 16))
         self.theme_combo_box = QComboBox(SettingsDialog)
         self.theme_combo_box.setObjectName(u"theme_combo_box")
-        self.theme_combo_box.setGeometry(QRect(80, 20, 68, 22))
+        self.theme_combo_box.setGeometry(QRect(80, 20, 111, 22))
 
         self.retranslateUi(SettingsDialog)
         self.button_box.accepted.connect(SettingsDialog.accept)

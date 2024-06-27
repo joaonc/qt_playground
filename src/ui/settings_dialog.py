@@ -10,6 +10,14 @@ class Settings(StrEnum):
     Style = 'Style'
 
 
+_styles = {style: style for style in QStyleFactory.keys()} | {
+    'Windows': 'Windows Classic',
+    'windows11': 'Windows 11',
+    'windowsvista': 'Windows Vista',
+}
+"""Qt stored name (keys) / Style friendly name (values)"""
+
+
 class SettingsDialog(QDialog, Ui_SettingsDialog):
     def __init__(self):
         super().__init__()
@@ -17,13 +25,11 @@ class SettingsDialog(QDialog, Ui_SettingsDialog):
 
         self.settings = QSettings()
 
-        # styles = [style for style in QStyleFactory.keys() if style[0].isupper()]
-        styles = QStyleFactory.keys()
-        current_theme: str = self.settings.value(Settings.Style, styles[0], str)  # type: ignore
-        self.theme_combo_box.addItems(styles)
-        self.theme_combo_box.setCurrentIndex(styles.index(current_theme))
+        for style_qt, style_friendly in _styles.items():
+            self.theme_combo_box.addItem(style_friendly, style_qt)
 
     def accept(self):
-        self.settings.setValue(Settings.Style, self.theme_combo_box.currentText())
+        style_qt = next(k for k, v in _styles.items() if v == self.theme_combo_box.currentText())
+        self.settings.setValue(Settings.Style, style_qt)
 
         super().accept()
