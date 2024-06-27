@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">
-    <normaloff>:/images/playground_icon_187860_256.png</normaloff>:/images/playground_icon_187860_256.png</iconset>
+    <normaloff>:/images/playground_icon.png</normaloff>:/images/playground_icon.png</iconset>
   </property>
   <widget class="QWidget" name="central_widget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -85,6 +85,8 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="action_settings"/>
+    <addaction name="separator"/>
     <addaction name="action_quit"/>
    </widget>
    <addaction name="menu_file"/>
@@ -101,12 +103,14 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="action_settings"/>
+   <addaction name="separator"/>
    <addaction name="action_quit"/>
   </widget>
   <action name="action_about">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/images/about_icon_512.png</normaloff>:/images/about_icon_512.png</iconset>
+     <normaloff>:/images/about_icon.png</normaloff>:/images/about_icon.png</iconset>
    </property>
    <property name="text">
     <string>About</string>
@@ -115,7 +119,7 @@
   <action name="action_quit">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/images/cancel-close-cross-delete_icon_114048_512.png</normaloff>:/images/cancel-close-cross-delete_icon_114048_512.png</iconset>
+     <normaloff>:/images/cancel_close_delete_cross_icon.png</normaloff>:/images/cancel_close_delete_cross_icon.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Quit</string>
@@ -132,10 +136,19 @@
   <action name="action_about_qt">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/images/about_qt_icon_512.png</normaloff>:/images/about_qt_icon_512.png</iconset>
+     <normaloff>:/images/about_qt_icon.png</normaloff>:/images/about_qt_icon.png</iconset>
    </property>
    <property name="text">
     <string>About &amp;Qt</string>
+   </property>
+  </action>
+  <action name="action_settings">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/images/settings_icon.png</normaloff>:/images/settings_icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Settings</string>
    </property>
   </action>
  </widget>

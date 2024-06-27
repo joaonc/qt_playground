@@ -1,3 +1,9 @@
+"""
+Global configs.
+
+Uppercase denotes global constants that should not be parametrized (ie, changed on different runs).
+"""
+
 import os
 import sys
 from pathlib import Path
@@ -15,6 +21,7 @@ def is_truthy(value) -> bool:
     return str(value).strip().lower() in ['true', '1']
 
 
+# region Run configs
 IS_BUNDLED_APP = getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS')
 """
 Whether the code is running as an executable bundled by PyInstaller or as normal Python code.
@@ -51,8 +58,19 @@ else:
 
 ASSETS_DIR = PROJECT_ROOT / 'assets'
 APP_MANIFEST_FILE = ASSETS_DIR / 'app.yaml'
+# endregion
 
+# region Global constants
+ORGANIZATION_NAME = 'The Qt Playground Foundation'
+ORGANIZATION_DOMAIN = 'qt-playground.app'
+APPLICATION_NAME = 'Qt Playground'
+# endregion
+
+# region General configs
 app_manifest = read_manifest_file(APP_MANIFEST_FILE)
+"""
+App manifest contents (as a dict).
+"""
 
 version = Version(app_manifest['version'])
 """App version."""
@@ -64,3 +82,4 @@ check_update_only = False
 update_manifest = None
 update_file = None
 backup_file = None
+# endregion

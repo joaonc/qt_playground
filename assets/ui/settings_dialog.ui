@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ShowMesssageDialog</class>
- <widget class="QDialog" name="ShowMesssageDialog">
+ <class>SettingsDialog</class>
+ <widget class="QDialog" name="SettingsDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,27 +11,51 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Show message</string>
+   <string>Settings</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">
     <normaloff>:/images/playground_icon.png</normaloff>:/images/playground_icon.png</iconset>
   </property>
-  <layout class="QVBoxLayout" name="vertical_layout">
-   <item>
-    <widget class="QPlainTextEdit" name="message_plain_text_edit"/>
-   </item>
-   <item>
-    <widget class="QDialogButtonBox" name="button_box">
-     <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
-     </property>
-    </widget>
-   </item>
-  </layout>
+  <widget class="QDialogButtonBox" name="button_box">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>240</y>
+     <width>341</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Orientation::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="theme_label">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>49</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Theme</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="theme_combo_box">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>20</y>
+     <width>111</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <resources>
   <include location="../resources.qrc"/>
@@ -40,7 +64,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>accepted()</signal>
-   <receiver>ShowMesssageDialog</receiver>
+   <receiver>SettingsDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -56,7 +80,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>rejected()</signal>
-   <receiver>ShowMesssageDialog</receiver>
+   <receiver>SettingsDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
