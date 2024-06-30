@@ -165,7 +165,7 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False, no_zip: bool
         )
     else:
         c.run(
-            f'pyinstaller {BUILD_SPEC_FILE} '
+            f'pyinstaller "{BUILD_SPEC_FILE}" '
             f'--distpath "{BUILD_DIST_DIR}" --workpath "{BUILD_WORK_DIR}"'
         )
 
