@@ -1,4 +1,4 @@
-from enum import StrEnum
+from enum import Enum
 
 from PySide6.QtCore import QSettings
 from PySide6.QtWidgets import QDialog, QStyleFactory
@@ -6,7 +6,7 @@ from PySide6.QtWidgets import QDialog, QStyleFactory
 from src.ui.forms.ui_settings_dialog import Ui_SettingsDialog
 
 
-class Settings(StrEnum):
+class Settings(str, Enum):  # Can be `StrEnum` on python 3.11+
     Style = 'Style'
 
 

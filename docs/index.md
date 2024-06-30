@@ -10,6 +10,21 @@ which includes _Qt Designer_, a WYSIWYG UI editor.
 pip install -r requirements-dev.txt
 ```
 
+!!! Note
+
+    If running tests (which uses `pytest`) on Python `<= 3.10`, then the `exceptiongroup` package
+    needs to be installed.
+
+    This can be done with:
+    ```
+    pip install -U pytest
+    ```
+
+    This will force upgrade `pytest`, which will install any dependencies not yet installed (ex.
+    `exceptiongroup`).  
+    This dependency is not in `requirements-dev.txt` because this file is generated with Python
+    3.11+.
+
 ## Development
 ### UI
 `Qt Designer` is used to create the UI, which outputs a `.ui` file (XML content that describes the
