@@ -148,14 +148,17 @@ def build_clean(c):
     help={
         'no_spec': f'Do not use the spec file `{BUILD_SPEC_FILE.relative_to(PROJECT_ROOT)}` and '
         f'create one in the `{BUILD_WORK_DIR.relative_to(PROJECT_ROOT)}` directory with defaults.',
-        'no_manifest': 'Do not create a manifest file.',
         'no_zip': 'Do not create a ZIP file, which can be used to upload to a GitHub release.',
     },
 )
-def build_dist(c, no_spec: bool = False, no_manifest: bool = False, no_zip: bool = False):
+def build_dist(c, no_spec: bool = False, no_zip: bool = False):
     """
     Build the distributable/executable file(s).
     """
+    from datetime import datetime, timezone
+
+    import yaml
+
     # Build executable
     if no_spec:
         c.run(
@@ -172,25 +175,18 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False, no_zip: bool
     app_file, manifest_file, zip_file = _get_build_files()
 
     # App manifest file
-    if no_manifest:
-        print('App manifest file not created.')
-    else:
-        from datetime import datetime, timezone
+    with open(BUILD_APP_MANIFEST_FILE) as f:
+        manifest = yaml.safe_load(f)
+    manifest |= {
+        'build_time': datetime.now(timezone.utc),
+        'git_commit': _get_git_commit(),
+        'file_name': app_file.name,
+        'file_sha1': _calculate_sha1(app_file),
+    }
 
-        import yaml
-
-        with open(BUILD_APP_MANIFEST_FILE) as f:
-            manifest = yaml.safe_load(f)
-        manifest |= {
-            'build_time': datetime.now(timezone.utc),
-            'git_commit': _get_git_commit(),
-            'file_name': app_file.name,
-            'file_sha1': _calculate_sha1(app_file),
-        }
-
-        with open(manifest_file, 'w') as f:
-            f.write('# App manifest\n\n')
-            yaml.safe_dump(manifest, f)
+    with open(manifest_file, 'w') as f:
+        f.write('# App manifest\n\n')
+        yaml.safe_dump(manifest, f)
 
     # Zip file
     if no_zip:
@@ -200,8 +196,7 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False, no_zip: bool
 
         with zipfile.ZipFile(zip_file, 'w') as f:
             f.write(app_file, arcname=app_file.name)
-            if manifest_file.exists():
-                f.write(manifest_file, arcname=manifest_file.name)
+            f.write(manifest_file, arcname=manifest_file.name)
 
     print('Done')
 
@@ -317,8 +312,9 @@ def ui_py(c, file=None):
         file_stems = [p.stem for p in UI_FILES]
 
     for file_stem in file_stems:
-        file_path_in = next((p for p in UI_FILES if p.stem == file_stem), None)
-        if not file_path_in:
+        try:
+            file_path_in = next(p for p in UI_FILES if p.stem == file_stem)
+        except StopIteration:
             raise Exit(
                 f'File "{file}" not found. Available files: {", ".join(p.stem for p in UI_FILES)}'
             )
@@ -348,8 +344,9 @@ def ui_rc(c, file=None):
         file_stems = [p.stem for p in QRC_FILES]
 
     for file_stem in file_stems:
-        file_path_in = next((p for p in QRC_FILES if p.stem == file_stem), None)
-        if not file_path_in:
+        try:
+            file_path_in = next(p for p in QRC_FILES if p.stem == file_stem)
+        except StopIteration:
             raise Exit(
                 f'File "{file}" not found. Available files: {", ".join(p.stem for p in QRC_FILES)}'
             )
@@ -369,8 +366,9 @@ def ui_edit(c, file):
     Edit a file in QT Designer.
     """
     file_stem = file[:-3] if file.lower().endswith('.ui') else file
-    ui_file_path = next((p for p in UI_FILES if p.stem == file_stem), None)
-    if not ui_file_path:
+    try:
+        ui_file_path = next(p for p in UI_FILES if p.stem == file_stem)
+    except StopIteration:
         raise Exit(
             f'File "{file}" not found. Available files: {", ".join(p.stem for p in UI_FILES)}'
         )
