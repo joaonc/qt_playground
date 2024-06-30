@@ -44,9 +44,9 @@ class TestOsData:
         assert os_data.applies(os_name) is expected
 
     def test_applies_current_os(self):
-        os_data=OsData('foo', os_include=[OsName.this()])
+        os_data = OsData('foo', os_include=[OsName.this()])
         assert os_data.applies() is True
 
     def test_does_not_apply_current_os(self):
-        os_data=OsData('foo', os_exclude=[OsName.this()])
+        os_data = OsData('foo', os_exclude=[OsName.this()])
         assert os_data.applies() is False

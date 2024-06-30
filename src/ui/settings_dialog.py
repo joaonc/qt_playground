@@ -1,11 +1,10 @@
 from enum import Enum
-from typing import cast
 
 from PySide6.QtCore import QSettings
 from PySide6.QtWidgets import QDialog, QStyleFactory
 
 from src.ui.forms.ui_settings_dialog import Ui_SettingsDialog
-from utils import OsData, OsName
+from src.utils import OsData, OsName
 
 
 class Settings(str, Enum):  # Can be `StrEnum` on python 3.11+
@@ -34,7 +33,7 @@ class SettingsDialog(QDialog, Ui_SettingsDialog):
 
         for style_qt_name, os_data in _styles.items():
             if os_data.applies():
-                style_friendly_name = cast(str, os_data.data)
+                style_friendly_name = os_data.data
                 self.theme_combo_box.addItem(style_friendly_name, style_qt_name)
 
     def accept(self):
