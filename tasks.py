@@ -84,9 +84,21 @@ def _get_requirements_files(requirements: str | None, extension: str) -> list[st
     return filenames
 
 
+def _get_os_name():
+    import platform
+
+    system = platform.system().lower()
+    return {'darwin': 'mac'}.get(system, system)
+
+
 def _get_build_files() -> tuple[Path, Path, Path]:
-    # Assumes the distribution directory is empty prior to creating the app
+    import yaml
+
     manifest_file = BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name
+    with open(BUILD_APP_MANIFEST_FILE) as f:
+        manifest = yaml.safe_load(f)
+
+    # Assumes the distribution directory is empty prior to creating the app
     files = [
         f
         for f in BUILD_DIST_DIR.glob('*')
@@ -100,7 +112,7 @@ def _get_build_files() -> tuple[Path, Path, Path]:
             f'{len(files)} files found:\n' + '\n'.join(str(file) for file in files)
         )
     app_file = files[0]
-    zip_file = BUILD_DIST_DIR / f'{app_file.stem}.zip'
+    zip_file = BUILD_DIST_DIR / f'{app_file.stem}_{manifest["version"]}_{_get_os_name()}.zip'
 
     return app_file, manifest_file, zip_file
 
@@ -194,6 +206,7 @@ def build_dist(c, no_spec: bool = False, no_zip: bool = False):
     else:
         import zipfile
 
+        archive_name = f'{app_file.name}_{manifest["version"]}'
         with zipfile.ZipFile(zip_file, 'w') as f:
             f.write(app_file, arcname=app_file.name)
             f.write(manifest_file, arcname=manifest_file.name)
@@ -275,21 +288,21 @@ def build_run(c):
     """
     Run the built package.
     """
-    import platform
+    os_name = _get_os_name()
 
-    if platform.system() == 'Windows':
+    if os_name == 'windows':
         exes = list(BUILD_DIST_DIR.glob('**/*.exe'))
         if len(exes) == 0:
             raise Exit('No executable found.')
         elif len(exes) > 1:
             raise Exit('Multiple executables found.')
         c.run(str(exes[0]))
-    elif platform.system() == 'Darwin':
+    elif os_name == 'mac':
         raise Exit('Running on MacOS still needs to be implemented.')
-    elif platform.system() == 'Linux':
+    elif os_name == 'linux':
         raise Exit('Running on Linux still needs to be implemented.')
     else:
-        raise Exit(f'Running on {platform.system()} is not supported.')
+        raise Exit(f'Running on {os_name.title()} is not supported.')
 
 
 @task(
