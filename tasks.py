@@ -206,7 +206,6 @@ def build_dist(c, no_spec: bool = False, no_zip: bool = False):
     else:
         import zipfile
 
-        archive_name = f'{app_file.name}_{manifest["version"]}'
         with zipfile.ZipFile(zip_file, 'w') as f:
             f.write(app_file, arcname=app_file.name)
             f.write(manifest_file, arcname=manifest_file.name)
@@ -274,11 +273,11 @@ def build_release(c, prerelease: bool = False, draft: bool = False, notes: str =
     if notes:
         command += f' --notes "{notes}"'
     if notes_file:
-        command += f'--notes-file "{notes_file}"'
+        command += f' --notes-file "{notes_file}"'
     if prerelease:
-        command += '--prerelease'
+        command += ' --prerelease'
     if draft:
-        command += '--draft'
+        command += ' --draft'
 
     c.run(command)
 
