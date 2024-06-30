@@ -81,7 +81,8 @@ def set_config_values():
     )
     parser.add_argument(
         '--log-level',
-        choices=[level.lower() for level in logging.getLevelNamesMapping()],
+        # Can use `logging.getLevelNamesMapping()` instead of `_nameToLevel` on python 3.11+
+        choices=[level.lower() for level in logging._nameToLevel],  # noqa
         default='error',
         help='Log level to use.',
     )

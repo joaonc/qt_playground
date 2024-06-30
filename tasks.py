@@ -84,9 +84,21 @@ def _get_requirements_files(requirements: str | None, extension: str) -> list[st
     return filenames
 
 
+def _get_os_name():
+    import platform
+
+    system = platform.system().lower()
+    return {'darwin': 'mac'}.get(system, system)
+
+
 def _get_build_files() -> tuple[Path, Path, Path]:
-    # Assumes the distribution directory is empty prior to creating the app
+    import yaml
+
     manifest_file = BUILD_DIST_DIR / BUILD_APP_MANIFEST_FILE.name
+    with open(BUILD_APP_MANIFEST_FILE) as f:
+        manifest = yaml.safe_load(f)
+
+    # Assumes the distribution directory is empty prior to creating the app
     files = [
         f
         for f in BUILD_DIST_DIR.glob('*')
@@ -100,7 +112,7 @@ def _get_build_files() -> tuple[Path, Path, Path]:
             f'{len(files)} files found:\n' + '\n'.join(str(file) for file in files)
         )
     app_file = files[0]
-    zip_file = BUILD_DIST_DIR / f'{app_file.stem}.zip'
+    zip_file = BUILD_DIST_DIR / f'{app_file.stem}_{manifest["version"]}_{_get_os_name()}.zip'
 
     return app_file, manifest_file, zip_file
 
@@ -148,14 +160,17 @@ def build_clean(c):
     help={
         'no_spec': f'Do not use the spec file `{BUILD_SPEC_FILE.relative_to(PROJECT_ROOT)}` and '
         f'create one in the `{BUILD_WORK_DIR.relative_to(PROJECT_ROOT)}` directory with defaults.',
-        'no_manifest': 'Do not create a manifest file.',
         'no_zip': 'Do not create a ZIP file, which can be used to upload to a GitHub release.',
     },
 )
-def build_dist(c, no_spec: bool = False, no_manifest: bool = False, no_zip: bool = False):
+def build_dist(c, no_spec: bool = False, no_zip: bool = False):
     """
     Build the distributable/executable file(s).
     """
+    from datetime import datetime, timezone
+
+    import yaml
+
     # Build executable
     if no_spec:
         c.run(
@@ -165,32 +180,25 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False, no_zip: bool
         )
     else:
         c.run(
-            f'pyinstaller {BUILD_SPEC_FILE} '
+            f'pyinstaller "{BUILD_SPEC_FILE}" '
             f'--distpath "{BUILD_DIST_DIR}" --workpath "{BUILD_WORK_DIR}"'
         )
 
     app_file, manifest_file, zip_file = _get_build_files()
 
     # App manifest file
-    if no_manifest:
-        print('App manifest file not created.')
-    else:
-        from datetime import datetime, timezone
+    with open(BUILD_APP_MANIFEST_FILE) as f:
+        manifest = yaml.safe_load(f)
+    manifest |= {
+        'build_time': datetime.now(timezone.utc),
+        'git_commit': _get_git_commit(),
+        'file_name': app_file.name,
+        'file_sha1': _calculate_sha1(app_file),
+    }
 
-        import yaml
-
-        with open(BUILD_APP_MANIFEST_FILE) as f:
-            manifest = yaml.safe_load(f)
-        manifest |= {
-            'build_time': datetime.now(timezone.utc),
-            'git_commit': _get_git_commit(),
-            'file_name': app_file.name,
-            'file_sha1': _calculate_sha1(app_file),
-        }
-
-        with open(manifest_file, 'w') as f:
-            f.write('# App manifest\n\n')
-            yaml.safe_dump(manifest, f)
+    with open(manifest_file, 'w') as f:
+        f.write('# App manifest\n\n')
+        yaml.safe_dump(manifest, f)
 
     # Zip file
     if no_zip:
@@ -200,8 +208,7 @@ def build_dist(c, no_spec: bool = False, no_manifest: bool = False, no_zip: bool
 
         with zipfile.ZipFile(zip_file, 'w') as f:
             f.write(app_file, arcname=app_file.name)
-            if manifest_file.exists():
-                f.write(manifest_file, arcname=manifest_file.name)
+            f.write(manifest_file, arcname=manifest_file.name)
 
     print('Done')
 
@@ -266,11 +273,11 @@ def build_release(c, prerelease: bool = False, draft: bool = False, notes: str =
     if notes:
         command += f' --notes "{notes}"'
     if notes_file:
-        command += f'--notes-file "{notes_file}"'
+        command += f' --notes-file "{notes_file}"'
     if prerelease:
-        command += '--prerelease'
+        command += ' --prerelease'
     if draft:
-        command += '--draft'
+        command += ' --draft'
 
     c.run(command)
 
@@ -280,27 +287,27 @@ def build_run(c):
     """
     Run the built package.
     """
-    import platform
+    os_name = _get_os_name()
 
-    if platform.system() == 'Windows':
+    if os_name == 'windows':
         exes = list(BUILD_DIST_DIR.glob('**/*.exe'))
         if len(exes) == 0:
             raise Exit('No executable found.')
         elif len(exes) > 1:
             raise Exit('Multiple executables found.')
         c.run(str(exes[0]))
-    elif platform.system() == 'Darwin':
+    elif os_name == 'mac':
         raise Exit('Running on MacOS still needs to be implemented.')
-    elif platform.system() == 'Linux':
+    elif os_name == 'linux':
         raise Exit('Running on Linux still needs to be implemented.')
     else:
-        raise Exit(f'Running on {platform.system()} is not supported.')
+        raise Exit(f'Running on {os_name.title()} is not supported.')
 
 
 @task(
     help={
         'file': '`.ui` file to be converted to `.py`. `.ui` extension not required. '
-        'Can be a comma separated. If not supplied, all files will be converted. '
+        'Can be a comma separated list. If not supplied, all files will be converted. '
         f'Available files: {", ".join(p.stem for p in UI_FILES)}.'
     }
 )
@@ -317,8 +324,9 @@ def ui_py(c, file=None):
         file_stems = [p.stem for p in UI_FILES]
 
     for file_stem in file_stems:
-        file_path_in = next((p for p in UI_FILES if p.stem == file_stem), None)
-        if not file_path_in:
+        try:
+            file_path_in = next(p for p in UI_FILES if p.stem == file_stem)
+        except StopIteration:
             raise Exit(
                 f'File "{file}" not found. Available files: {", ".join(p.stem for p in UI_FILES)}'
             )
@@ -348,8 +356,9 @@ def ui_rc(c, file=None):
         file_stems = [p.stem for p in QRC_FILES]
 
     for file_stem in file_stems:
-        file_path_in = next((p for p in QRC_FILES if p.stem == file_stem), None)
-        if not file_path_in:
+        try:
+            file_path_in = next(p for p in QRC_FILES if p.stem == file_stem)
+        except StopIteration:
             raise Exit(
                 f'File "{file}" not found. Available files: {", ".join(p.stem for p in QRC_FILES)}'
             )
@@ -369,8 +378,9 @@ def ui_edit(c, file):
     Edit a file in QT Designer.
     """
     file_stem = file[:-3] if file.lower().endswith('.ui') else file
-    ui_file_path = next((p for p in UI_FILES if p.stem == file_stem), None)
-    if not ui_file_path:
+    try:
+        ui_file_path = next(p for p in UI_FILES if p.stem == file_stem)
+    except StopIteration:
         raise Exit(
             f'File "{file}" not found. Available files: {", ".join(p.stem for p in UI_FILES)}'
         )
