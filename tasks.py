@@ -300,7 +300,7 @@ def build_run(c):
 @task(
     help={
         'file': '`.ui` file to be converted to `.py`. `.ui` extension not required. '
-        'Can be a comma separated. If not supplied, all files will be converted. '
+        'Can be a comma separated list. If not supplied, all files will be converted. '
         f'Available files: {", ".join(p.stem for p in UI_FILES)}.'
     }
 )
