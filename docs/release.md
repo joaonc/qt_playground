@@ -1,13 +1,16 @@
-More info in [Managing releases in a repository](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository).
+This project uses [GitHub CLI](https://cli.github.com/) ([docs](https://cli.github.com/manual/))
+to manage releases.
 
-Using GH CLI (TODO: More info here.)
+You'll need to install and authenticate `gh` in order to perform the release tasks.
 
-Authenticating:
+To install, download the file in the link above and follow the instructions.
+
+Authenticate with this command:
 ```
 gh auth login
 ```
 
-Sample output from logging in with the `HTTPS` protocol and via web browser.
+Sample output from login with the `HTTPS` protocol and via web browser.
 ```
 gh auth login
 ? What account do you want to log into? GitHub.com
@@ -23,7 +26,11 @@ Press Enter to open github.com in your browser...
 ✓ Logged in as <GH username>
 ```
 
-## Creating a release
+You can authenticate in other ways, see
+[docs](https://cli.github.com/manual/gh_auth_login) for more info.
+
+## Release
+### Create release
 
 1. Update (increase) the app version in `assets/app.yaml`.
 2. Create and merge a new PR called "Preparing for v1.2.3" release.  
@@ -33,6 +40,14 @@ Press Enter to open github.com in your browser...
    Use the `--notes` or `--notes-file` to add more details to the release.  
    See sections below for beta and draft releases.
 
-### Beta
+#### Beta
+TODO
 
-### Draft
+#### Draft
+TODO
+
+### Upload artifacts
+TODO
+
+## More info
+[Managing releases in a repository](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository).
