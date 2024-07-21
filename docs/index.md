@@ -4,7 +4,15 @@ Playing around with **Qt** for learning purposes.
 Uses [Qt 6](https://www.qt.io) and [Qt for Python](https://wiki.qt.io/Qt_for_Python), aka _PySide_,
 which includes _Qt Designer_, a WYSIWYG UI editor.
 
-## Getting started
+## Run executable
+If you plan on simply using the app (not doing any development), follow the instructions below in
+this section.
+
+1. Go to the [latest release](https://github.com/joaonc/qt_playground/releases/latest) page.
+2. Download the file for your OS.
+3. Expand the downloaded Zip file and run the executable.
+
+## Development
 ### Requirements
 ```
 pip install -r requirements-dev.txt
@@ -25,7 +33,6 @@ pip install -r requirements-dev.txt
     This dependency is not in `requirements-dev.txt` because this file is generated with Python
     3.11+.
 
-## Development
 ### UI
 `Qt Designer` is used to create the UI, which outputs a `.ui` file (XML content that describes the
 UI). This file is then transformed into a `.py` file.
