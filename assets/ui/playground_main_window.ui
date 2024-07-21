@@ -89,7 +89,15 @@
     <addaction name="separator"/>
     <addaction name="action_quit"/>
    </widget>
+   <widget class="QMenu" name="menu_view">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <addaction name="action_messages"/>
+    <addaction name="action_animation"/>
+   </widget>
    <addaction name="menu_file"/>
+   <addaction name="menu_view"/>
    <addaction name="menu_help"/>
   </widget>
   <widget class="QStatusBar" name="status_bar"/>
@@ -149,6 +157,16 @@
    </property>
    <property name="text">
     <string>&amp;Settings</string>
+   </property>
+  </action>
+  <action name="action_messages">
+   <property name="text">
+    <string>Messages</string>
+   </property>
+  </action>
+  <action name="action_animation">
+   <property name="text">
+    <string>Animation</string>
    </property>
   </action>
  </widget>
