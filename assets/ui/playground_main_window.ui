@@ -111,6 +111,8 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="action_animation"/>
+   <addaction name="separator"/>
    <addaction name="action_settings"/>
    <addaction name="separator"/>
    <addaction name="action_quit"/>
@@ -165,6 +167,10 @@
    </property>
   </action>
   <action name="action_animation">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/images/animation_icon.png</normaloff>:/images/animation_icon.png</iconset>
+   </property>
    <property name="text">
     <string>Animation</string>
    </property>

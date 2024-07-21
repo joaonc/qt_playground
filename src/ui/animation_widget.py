@@ -9,6 +9,6 @@ class AnimationWidget(QWidget, Ui_AnimationWidget):
         super().__init__()
         self.setupUi(self)
 
-        self.movie = QMovie(gif_path)
+        self.movie = QMovie(str(gif_path))
         self.animation_label.setMovie(self.movie)
         self.movie.start()

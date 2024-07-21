@@ -1,5 +1,6 @@
 <RCC>
   <qresource>
+    <file>images/animation_icon.png</file>
     <file>images/stop_icon.png</file>
     <file>images/play_icon.png</file>
     <file>images/cancel_close_delete_cross_icon.png</file>
