@@ -1,5 +1,7 @@
 <RCC>
   <qresource>
+    <file>images/stop_icon.png</file>
+    <file>images/play_icon.png</file>
     <file>images/cancel_close_delete_cross_icon.png</file>
     <file>images/about_icon.png</file>
     <file>images/about_qt_icon.png</file>
