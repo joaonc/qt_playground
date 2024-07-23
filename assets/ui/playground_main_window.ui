@@ -89,7 +89,15 @@
     <addaction name="separator"/>
     <addaction name="action_quit"/>
    </widget>
+   <widget class="QMenu" name="menu_view">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <addaction name="action_messages"/>
+    <addaction name="action_animation"/>
+   </widget>
    <addaction name="menu_file"/>
+   <addaction name="menu_view"/>
    <addaction name="menu_help"/>
   </widget>
   <widget class="QStatusBar" name="status_bar"/>
@@ -103,6 +111,8 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="action_animation"/>
+   <addaction name="separator"/>
    <addaction name="action_settings"/>
    <addaction name="separator"/>
    <addaction name="action_quit"/>
@@ -149,6 +159,20 @@
    </property>
    <property name="text">
     <string>&amp;Settings</string>
+   </property>
+  </action>
+  <action name="action_messages">
+   <property name="text">
+    <string>Messages</string>
+   </property>
+  </action>
+  <action name="action_animation">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/images/animation_icon.png</normaloff>:/images/animation_icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Animation</string>
    </property>
   </action>
  </widget>

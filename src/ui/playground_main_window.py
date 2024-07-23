@@ -6,6 +6,7 @@ from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QMessageBox, Q
 
 import src.config as config
 import src.update.update as update
+from src.ui.animation_dialog import AnimationDialog
 from src.ui.forms.ui_playground_main_window import Ui_PlaygroundMainWindow
 from src.ui.settings_dialog import Settings, SettingsDialog
 from src.ui.show_message_dialog import ShowMessageDialog
@@ -20,6 +21,7 @@ class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
         # UI bindings
         self.message_button.clicked.connect(self.send_message)
         self.show_messages_button.clicked.connect(self.show_message)
+        self.action_animation.triggered.connect(self.show_animation)
         self.action_settings.triggered.connect(self.settings)
         self.action_quit.triggered.connect(self.close)
         self.action_check_for_updates.triggered.connect(self.check_for_updates)
@@ -44,6 +46,10 @@ class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
         dialog.message_plain_text_edit.setPlainText(self.output_plain_text_edit.toPlainText())
         result = dialog.exec()
         print(result)
+
+    def show_animation(self):
+        dialog = AnimationDialog(config.ASSETS_DIR / 'images' / 'button.gif')
+        dialog.exec()
 
     # noinspection PyMethodMayBeStatic
     def settings(self):
