@@ -312,6 +312,7 @@ def build_upload(c, label: str = 'auto'):
       * The release in GitHub (`inv build.release`).
     """
     import zipfile
+
     import yaml
 
     _, manifest_file, zip_file = _get_build_files()
