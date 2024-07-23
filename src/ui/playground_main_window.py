@@ -6,10 +6,10 @@ from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QMessageBox, Q
 
 import src.config as config
 import src.update.update as update
+from src.ui.animation_dialog import AnimationDialog
 from src.ui.forms.ui_playground_main_window import Ui_PlaygroundMainWindow
 from src.ui.settings_dialog import Settings, SettingsDialog
 from src.ui.show_message_dialog import ShowMessageDialog
-from ui.animation_widget import AnimationWidget
 
 
 class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
@@ -48,8 +48,8 @@ class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
         print(result)
 
     def show_animation(self):
-        widget = AnimationWidget(config.ASSETS_DIR / 'images' / 'button.gif')
-        widget.show()
+        dialog = AnimationDialog(config.ASSETS_DIR / 'images' / 'button.gif')
+        dialog.exec()
 
     # noinspection PyMethodMayBeStatic
     def settings(self):

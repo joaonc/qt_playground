@@ -1,10 +1,10 @@
 from PySide6.QtGui import QMovie
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QDialog
 
-from src.ui.forms.ui_animation_widget import Ui_AnimationWidget
+from ui.forms.ui_animation_dialog import Ui_AnimationDialog
 
 
-class AnimationWidget(QWidget, Ui_AnimationWidget):
+class AnimationDialog(QDialog, Ui_AnimationDialog):
     def __init__(self, gif_path):
         super().__init__()
         self.setupUi(self)
