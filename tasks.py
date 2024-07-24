@@ -570,7 +570,7 @@ def docs_serve(c):
 @task
 def docs_deploy(c):
     """
-    Publish documentation to GitHub Pages at https://xealenergy.github.io/xeal-nift-qa
+    Publish documentation to GitHub Pages at https://joaonc.github.io/qt_playground
     """
     c.run('mkdocs gh-deploy')
 
