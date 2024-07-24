@@ -48,7 +48,11 @@ class PlaygroundMainWindow(QMainWindow, Ui_PlaygroundMainWindow):
         print(result)
 
     def show_animation(self):
-        dialog = AnimationDialog(config.ASSETS_DIR / 'images' / 'button.gif')
+        # This `.gif` file is not bundled in the resources like the other images.
+        # It is added as a separate file with the executable for demo purposes (how to include an
+        # external resource in the app).
+        gif_path = config.ASSETS_DIR / 'images' / 'button.gif'
+        dialog = AnimationDialog(gif_path)
         dialog.exec()
 
     # noinspection PyMethodMayBeStatic

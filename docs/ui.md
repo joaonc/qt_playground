@@ -82,7 +82,7 @@ everywhere.
 
 They are converted to `.py` using `pyside6-rcc`. Binaries included as a binary string.
 
-Notes:
+**Notes:**
 
 * The `.py` resource files should have `_rc` appended in the name.  
   Ex, `user_form.qrc` should be converted to `user_form_rc.py`.
@@ -94,11 +94,13 @@ Notes:
   same and everything is similar.  
   In Qt Creator there's the concept of _Project_ and the resource file needs to first be associated
   with the project to then be used in the `.ui` file.
+* The file `assets/images/button.gif` is included in the app as an external resource file for demo
+  purposes.
   
 !!! Note
 
     SVG files may not work on some machines if the required dependencies are not installed.  
-    For that reason, working only with PNG, ICO and JPG files.
+    For that reason, working only with PNG, ICO, GIF and JPG files.
 
     For a list of supported formats in the current machine:
 
