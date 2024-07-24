@@ -366,7 +366,8 @@ def build_run(c):
             raise Exit('Multiple executables found.')
         c.run(str(exes[0]))
     elif os_name == 'mac':
-        raise Exit('Running on MacOS still needs to be implemented.')
+        app_file, _, _ = _get_build_files()
+        c.run(str(app_file))
     elif os_name == 'linux':
         raise Exit('Running on Linux still needs to be implemented.')
     else:

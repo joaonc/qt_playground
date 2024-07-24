@@ -17,7 +17,16 @@ a = Analysis(
     pathex=[],
     binaries=[],
     # https://pyinstaller.org/en/stable/spec-files.html#adding-data-files
-    datas=[(str(APP_MANIFEST_FILE), str(ASSETS_DIR.relative_to(PROJECT_ROOT)))],
+    datas=[
+        (
+            str(APP_MANIFEST_FILE),
+            str(ASSETS_DIR.relative_to(PROJECT_ROOT)),
+        ),
+        (
+            str(ASSETS_DIR / 'images' / 'button.gif'),
+            str(ASSETS_DIR.relative_to(PROJECT_ROOT) / 'images'),
+        ),
+    ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
