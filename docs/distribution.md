@@ -32,7 +32,7 @@ For now, this project uses PyInstaller only, but if you want to know more about 
 Framework, follow the links in this section.
 
 ### Install Qt Framework
-https://doc.qt.io/qt-6/get-and-install-qt.html
+[https://doc.qt.io/qt-6/get-and-install-qt.html](https://doc.qt.io/qt-6/get-and-install-qt.html)
 
 For this project, installed the single developer open source (free) version.
 

@@ -80,7 +80,7 @@ comments that add functionality:
   level.
 
 ## Qt Installation
-https://doc.qt.io/qt-6/get-and-install-qt.html
+[https://doc.qt.io/qt-6/get-and-install-qt.html](https://doc.qt.io/qt-6/get-and-install-qt.html)
 
 For this project, installed the single developer open source (free) version.
 
