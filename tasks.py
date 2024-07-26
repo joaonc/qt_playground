@@ -301,7 +301,7 @@ def build_release(
         '`--dry` option to see the label without uploading the artifact.'
     },
 )
-def build_upload(c, label: str = 'auto'):
+def build_upload(c, label: str = 'none'):
     """
     Upload asset to the release in the manifest file.
     The artifact being uploaded is the Zip file with the executable binary for the current OS.
