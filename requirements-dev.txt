@@ -102,7 +102,7 @@ pyside6-essentials==6.7.2
     #   -r requirements.txt
     #   pyside6
     #   pyside6-addons
-pytest==8.3.1
+pytest==8.3.2
     # via
     #   -r requirements-dev.in
     #   pytest-qt
@@ -127,7 +127,7 @@ shiboken6==6.7.2
     #   pyside6-essentials
 stevedore==5.2.0
     # via bandit
-types-pyyaml==6.0.12.20240311
+types-pyyaml==6.0.12.20240724
     # via -r requirements-dev.in
 typing-extensions==4.12.2
     # via mypy
