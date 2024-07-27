@@ -97,7 +97,7 @@ def set_config_values():
 
     logging.basicConfig(level=logging.getLevelName(args.log_level.upper()))
     logging.debug(
-        f'Qt Playground.\n  App version: {config.version}.\n  Log level: {args.log_level}.\n  '
+        f'Qt Playground.\n  App version: {config.version}\n  Log level: {args.log_level}\n  '
         f'File: {sys.executable}'
     )
 
