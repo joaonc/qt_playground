@@ -10,21 +10,23 @@ Authenticate with this command:
 gh auth login
 ```
 
-Sample output from login with the `HTTPS` protocol and via web browser.
-```
-gh auth login
-? What account do you want to log into? GitHub.com
-? What is your preferred protocol for Git operations on this host? HTTPS
-? Authenticate Git with your GitHub credentials? Yes
-? How would you like to authenticate GitHub CLI? Login with a web browser
+??? Note "Sample output"
 
-! First copy your one-time code: 9999-9999
-Press Enter to open github.com in your browser... 
-✓ Authentication complete.
-- gh config set -h github.com git_protocol https
-✓ Configured git protocol
-✓ Logged in as <GH username>
-```
+    Sample output from login with the `HTTPS` protocol and via web browser.
+    ```
+    gh auth login
+    ? What account do you want to log into? GitHub.com
+    ? What is your preferred protocol for Git operations on this host? HTTPS
+    ? Authenticate Git with your GitHub credentials? Yes
+    ? How would you like to authenticate GitHub CLI? Login with a web browser
+
+    ! First copy your one-time code: 9999-9999
+    Press Enter to open github.com in your browser... 
+    ✓ Authentication complete.
+    - gh config set -h github.com git_protocol https
+    ✓ Configured git protocol
+    ✓ Logged in as <GH username>
+    ```
 
 You can authenticate in other ways, see
 [docs](https://cli.github.com/manual/gh_auth_login) for more info.
@@ -41,7 +43,7 @@ You can authenticate in other ways, see
 
 !!! Note "Recommended command"
 
-    Create the file `release_notes.md` and _don't_ add it to the project
+    Create the file `release_notes.md` and _don't_ add it to the project.
 
     ```
     inv build.release --notes-file release_notes.md
@@ -50,13 +52,13 @@ You can authenticate in other ways, see
 See sections below for beta and draft releases.
 
 #### Beta
-TODO
+**TODO**
 
 #### Draft
-TODO
+**TODO**
 
 ### Upload artifacts
-TODO
+**TODO**
 
 ## More info
 [Managing releases in a repository](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository).
