@@ -33,12 +33,21 @@ You can authenticate in other ways, see
 ### Create release
 
 1. Update (increase) the app version in `assets/app.yaml`.
-2. Create and merge a new PR called "Preparing for v1.2.3" release.  
+2. Create and merge a new PR called _"Preparing for v1.2.3"_ release.  
    This merges the new version, which will be used to create the release and set it to the right
    commit hash.
 3. Run `inv build.release`
    Use the `--notes` or `--notes-file` to add more details to the release.  
-   See sections below for beta and draft releases.
+
+!!! Note "Recommended command"
+
+    Create the file `release_notes.md` and _don't_ add it to the project
+
+    ```
+    inv build.release --notes-file release_notes.md
+    ```
+
+See sections below for beta and draft releases.
 
 #### Beta
 TODO
