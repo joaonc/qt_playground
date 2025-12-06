@@ -576,6 +576,16 @@ def docs_deploy(c):
     c.run('mkdocs gh-deploy')
 
 
+@task
+def docs_clean(c):
+    """
+    Delete documentation website static files.
+    """
+    import shutil
+
+    shutil.rmtree(PROJECT_ROOT / 'site', ignore_errors=True)
+
+
 ns = Collection()  # Main namespace
 
 test_collection = Collection('test')
@@ -609,6 +619,7 @@ precommit_collection.add_task(precommit_upgrade, 'upgrade')
 docs_collection = Collection('docs')
 docs_collection.add_task(docs_serve, 'serve')
 docs_collection.add_task(docs_deploy, 'deploy')
+docs_collection.add_task(docs_clean, 'clean')
 
 ui_collection = Collection('ui')
 ui_collection.add_task(ui_py, 'py')
